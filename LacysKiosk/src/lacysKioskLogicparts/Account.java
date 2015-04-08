@@ -26,6 +26,7 @@ public class Account
     private String password;
     private int userID;
     private int privilege;
+    private int num;
     
     public Account()
     {
