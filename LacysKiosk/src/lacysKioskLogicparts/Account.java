@@ -18,7 +18,7 @@ import static lacysKioskGUIparts.MainPage.JDBC_DRIVER;
 
 /**
  *
- * @author Alisha
+ * @author Alisha Locust
  */
 public class Account 
 {

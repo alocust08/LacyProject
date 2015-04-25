@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Alisha
+ * @author Alisha Locust
  */
 @Entity
 @Table(name = "Inventory")
@@ -157,7 +157,7 @@ public class Inventory implements Serializable {
 
     @Override
     public String toString() {
-        return "lacysKioskLogicparts.Inventory[ inventoryPK=" + itemID + " ]";
+        return "lacysKioskLogicparts.Inventory[ itemID=" + itemID + " ]";
     }
     
 }

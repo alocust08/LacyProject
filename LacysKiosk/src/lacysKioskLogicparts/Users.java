@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
@@ -17,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Alisha
+ * @author Alisha Locust
  */
 @Entity
 @Table(name = "Users")
@@ -129,7 +125,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "lacysKioskLogicparts.Users[ usersPK=" + userID + " ]";
+        return "lacysKioskLogicparts.Users[ userID=" + userID + " ]";
     }
     
 }

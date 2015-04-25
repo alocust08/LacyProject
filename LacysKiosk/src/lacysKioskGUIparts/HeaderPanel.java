@@ -14,7 +14,10 @@ import lacysKioskLogicparts.Account;
  * @author Alisha
  */
 public class HeaderPanel extends javax.swing.JPanel {
-
+    
+    //Since this panel mostly is in charge of log in, it will hold the variable of if user is logged in or not
+    static boolean loggedIn = false;
+    
     /**
      * Creates new form HeaderPanel
      */
@@ -67,6 +70,7 @@ public class HeaderPanel extends javax.swing.JPanel {
         cartItemNumText.setText("(0)");
         cartItemNumText.setToolTipText("");
         cartItemNumText.setBorder(null);
+        cartItemNumText.setDisabledTextColor(new java.awt.Color(240, 240, 240));
 
         userNameText.setToolTipText("");
 
@@ -91,8 +95,8 @@ public class HeaderPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(cartLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cartItemNumText, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(cartItemNumText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
         firstHeaderPanelLayout.setVerticalGroup(
             firstHeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,11 +146,11 @@ public class HeaderPanel extends javax.swing.JPanel {
                 .addComponent(userLabel)
                 .addGap(68, 68, 68)
                 .addComponent(logOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
                 .addComponent(cartLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cartItemNumText1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(cartItemNumText1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
         secondHeaderPanelLayout.setVerticalGroup(
             secondHeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,10 +183,14 @@ public class HeaderPanel extends javax.swing.JPanel {
         {
             tempUser.setUsername(name);
             tempUser.setPassword(pswd);
-            MainPage.setUser(tempUser);
+            MainPage.setUser(tempUser); //Set user value on main page
             CardLayout cl = (CardLayout)(this.getLayout());
             cl.show(this, "LoggedInCard"); //flipped to logged in header card
             userLabel.setText(name); //set user's name in welcome message
+            loggedIn = true;
+            //Set something here to check if there are items in cart and ask user if would like to keep items
+            //or if would like to clear cart. In case they had been browsing as a guest and now want to sign in
+            //and keep what they might have already added.
         }
         userNameText.setText(""); //clear fields
         passwordText.setText("");
@@ -190,16 +198,30 @@ public class HeaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_logInButtonActionPerformed
 
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
-        // TODO add your handling code here:
+        
         CardLayout cl = (CardLayout) (this.getLayout());
-        cl.show(this, "NotLoggedInCard");
-        //something here to change main user
+        cl.show(this, "NotLoggedInCard"); //Go back to logged out header card
+        MainPage.clearCart(); //clear cart
+        setNumInCartLabel(0); //set the cart number label back to zero
+        loggedIn = false; 
+        //something here to change main user???
     }//GEN-LAST:event_logOutButtonActionPerformed
 
+    public static void setNumInCartLabel(int num) //This needs to be accessed by other classes
+    {
+        if (loggedIn)
+        {
+            cartItemNumText1.setText(String.format("(%d)", num));
+        }
+        else
+        {
+            cartItemNumText.setText(String.format("(%d)", num));
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField cartItemNumText;
-    private javax.swing.JTextField cartItemNumText1;
+    private static javax.swing.JTextField cartItemNumText;
+    private static javax.swing.JTextField cartItemNumText1;
     private javax.swing.JLabel cartLabel;
     private javax.swing.JLabel cartLabel1;
     private javax.swing.JPanel firstHeaderPanel;

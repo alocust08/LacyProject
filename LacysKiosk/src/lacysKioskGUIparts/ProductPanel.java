@@ -5,17 +5,28 @@
  */
 package lacysKioskGUIparts;
 
+import lacysKioskLogicparts.Inventory;
+
 /**
  *
  * @author Alisha
  */
 public class ProductPanel extends javax.swing.JPanel {
 
+    Inventory product; //Hold product for each panel
+    
     /**
      * Creates new form ProductPanel
      */
-    public ProductPanel() {
+    public ProductPanel() { //Default constructor
         initComponents();
+    }
+    
+    public ProductPanel(Inventory prod) //Constructor with Inventory object passed in
+    {
+        initComponents();
+        product = prod;
+        setProductPanel(prod);
     }
 
     /**
@@ -47,7 +58,9 @@ public class ProductPanel extends javax.swing.JPanel {
         ratingLabel.setLabelFor(ratingNumText);
         ratingLabel.setText("Rating: ");
 
+        descriptionArea.setEditable(false);
         descriptionArea.setColumns(20);
+        descriptionArea.setLineWrap(true);
         descriptionArea.setRows(5);
         jScrollPane1.setViewportView(descriptionArea);
 
@@ -93,14 +106,14 @@ public class ProductPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(itemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ratingLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ratingNumText, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ratingNumText, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(starRater1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,7 +148,7 @@ public class ProductPanel extends javax.swing.JPanel {
                     .addComponent(ratingLabel)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ratingNumText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(priceLabel)))
+                        .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,6 +165,9 @@ public class ProductPanel extends javax.swing.JPanel {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         //Bring up pop up window for add to cart
+        AddToCartPopUp addPopUp = MainPage.getCartPopUp(); //Get static add to cart pop up from main page
+        addPopUp.setUpAddPopUp(product); //Set up the add pop up window with product information
+        addPopUp.setVisible(true); //Make the pop up visible
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void checkReviewsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkReviewsButtonActionPerformed
@@ -164,7 +180,30 @@ public class ProductPanel extends javax.swing.JPanel {
         //Open pop up window to write a review for a product
     }//GEN-LAST:event_writeReviewButtonActionPerformed
 
-
+    public void setProductPanel(Inventory product){
+        itemLabel.setText(product.getItemName());
+        priceLabel.setText("$" + String.format("%,.2f", product.getItemPrice()));
+        descriptionArea.setText(product.getItemDescription());
+        starRater1.setRating((float) convertToStarRating(product.getItemRating()));
+        ratingNumText.setText(String.format("%.1f%%", product.getItemRating()));
+    }
+    
+    private double convertToStarRating(double rating)
+    {
+        //Take a percentage number (ex: 10 not .10 for 10%) and convert to star's rating system of 5
+        //Multiply the rating by 5 which is the star's highest rating. Then divide that by 100
+        return (5.0 * rating) / 100.0;
+    }
+    
+    private double convertToRegularRating(double rating)
+    {
+        //Take the star's rating and conver to percentage out of 100
+        //Mulitply the rating by 100 (which is the regular highest rating). Then divide by 5.
+        return (100.0 * rating) / 5.0; 
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton checkReviewsButton;

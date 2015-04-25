@@ -16,6 +16,7 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
      */
     public CheckReviewsPopUp() {
         initComponents();
+        setVisible(false);
     }
 
     /**
