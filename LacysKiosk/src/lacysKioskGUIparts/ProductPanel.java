@@ -6,6 +6,7 @@
 package lacysKioskGUIparts;
 
 import lacysKioskLogicparts.Inventory;
+import lacysKioskLogicparts.Messages;
 
 /**
  *
@@ -14,6 +15,7 @@ import lacysKioskLogicparts.Inventory;
 public class ProductPanel extends javax.swing.JPanel {
 
     Inventory product; //Hold product for each panel
+    Messages review;
     
     /**
      * Creates new form ProductPanel
@@ -173,6 +175,10 @@ public class ProductPanel extends javax.swing.JPanel {
     private void checkReviewsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkReviewsButtonActionPerformed
         // TODO add your handling code here:
         //Open pop up window for reviews of product written by customers
+        CheckReviewsPopUp reviewsPopUp = MainPage.getReviewsPopUp();
+        reviewsPopUp.setUpReviewsPopUp(product);
+        reviewsPopUp.setVisible(true);
+        
     }//GEN-LAST:event_checkReviewsButtonActionPerformed
 
     private void writeReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeReviewButtonActionPerformed

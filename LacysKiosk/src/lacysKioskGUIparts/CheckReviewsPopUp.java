@@ -5,6 +5,14 @@
  */
 package lacysKioskGUIparts;
 
+import java.util.List;
+import java.util.ListIterator;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import lacysKioskLogicparts.Inventory;
+import lacysKioskLogicparts.Messages;
+
 /**
  *
  * @author Alisha
@@ -31,6 +39,7 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
         reviewsForLabel = new javax.swing.JLabel();
         productNameLabel = new javax.swing.JLabel();
         reviewsPanel = new javax.swing.JPanel();
+        reviewCloseBtn = new javax.swing.JButton();
 
         setTitle("Reviews");
 
@@ -50,8 +59,16 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
         );
         reviewsPanelLayout.setVerticalGroup(
             reviewsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
+
+        reviewCloseBtn.setText("Close");
+        reviewCloseBtn.setToolTipText("");
+        reviewCloseBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reviewCloseBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,6 +84,10 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(reviewsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(reviewCloseBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,15 +98,50 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
                     .addComponent(productNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reviewsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(reviewCloseBtn)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void reviewCloseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewCloseBtnActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+    }//GEN-LAST:event_reviewCloseBtnActionPerformed
+
+    
+    public void setUpReviewsPopUp(Inventory product)
+    {
+        productNameLabel.setText(product.getItemName());
+        
+        reviewsPanel.removeAll(); //clear everything from panel from possible previous browse
+        JPanel viewPanel = new JPanel();
+        viewPanel.setSize(reviewsPanel.getWidth(), reviewsPanel.getHeight());
+        viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollpanel = new JScrollPane(); //Scrollpanel so can see all reviews shown
+        scrollpanel.setSize(reviewsPanel.getWidth(), reviewsPanel.getHeight());
+        
+        List<Messages> allReviews = MainPage.getEManager().getReviewsByProduct(product.getItemID());
+        ListIterator iter = allReviews.listIterator();
+        while (iter.hasNext())
+        {
+            Messages review = (Messages) iter.next();
+            ReviewPanel revPanel = new ReviewPanel();
+            revPanel.setUpReviewPanel(review, product.getItemRating());
+            viewPanel.add(revPanel);    
+        }
+        
+        scrollpanel.setViewportView(viewPanel);
+        reviewsPanel.add(scrollpanel);
+        reviewsPanel.revalidate();
+        reviewsPanel.repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel productNameLabel;
+    private javax.swing.JButton reviewCloseBtn;
     private javax.swing.JLabel reviewsForLabel;
     private javax.swing.JPanel reviewsPanel;
     // End of variables declaration//GEN-END:variables

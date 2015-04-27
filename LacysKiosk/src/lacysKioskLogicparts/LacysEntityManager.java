@@ -56,6 +56,18 @@ public class LacysEntityManager {
         return product;
     }
     
+    public List<Messages> getReviewsByProduct(int prodId)
+    {
+        return (List<Messages>) em.createNamedQuery("Messages.findByTarget").setParameter("target", prodId).getResultList(); 
+    }
+    
+    public Users findUserByID(int userID)
+    {
+        Users aUser = (Users) em.createNamedQuery("Users.findByUserID").setParameter("userID", userID).getSingleResult();
+        return aUser;
+        
+    }
+    
     public Users findUser(String name)
     {
         Users tempUser;

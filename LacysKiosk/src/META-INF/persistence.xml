@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>lacysKioskLogicparts.Users</class>
     <class>lacysKioskLogicparts.Inventory</class>
+    <class>lacysKioskLogicparts.Messages</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\\Data\\lacys"/>
       <property name="javax.persistence.jdbc.user" value=""/>

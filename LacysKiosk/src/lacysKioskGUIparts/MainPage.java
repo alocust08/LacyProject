@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.BoxLayout;
@@ -42,7 +43,7 @@ public class MainPage extends javax.swing.JFrame {
     private static DefaultTableModel cartModel; //This is the model to go with the cart table
     private static AddToCartPopUp addCart; //This popup window confirms adding an item to cart
     private static CheckReviewsPopUp checkReviews; //This popup window shows product reviews
-    private LacysEntityManager eManager; //Class to handle inventory requests
+    private static LacysEntityManager eManager; //Class to handle inventory requests
     
     private Connection connection; //Temporary while using regular database stuff
     private Statement statement; //Temporary while using regular database stuff
@@ -798,8 +799,9 @@ public class MainPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Checks if any checkboxes are checked or unchecked and then deletes the ones
         //that are checked from cart
+        ArrayList<Integer> rowNums = new ArrayList<Integer>(); //holds row numbers that need to be deleted
         int numRows = cartModel.getRowCount();
-         for (int row = 0; row < numRows; row++)
+        for (int row = 0; row < numRows; row++)
         {
             String prodName = cartModel.getValueAt(row, 0).toString();
             Inventory product = eManager.findProductbyName(prodName);
@@ -809,7 +811,8 @@ public class MainPage extends javax.swing.JFrame {
                 if (product != null)
                 {
                     cart.removeItem(product.getItemID());
-                    cartModel.removeRow(row);
+                    //cartModel.removeRow(row);
+                    rowNums.add(row);
                 }
             }
             else
@@ -824,7 +827,12 @@ public class MainPage extends javax.swing.JFrame {
             }
         
         }
-         
+        
+        //Go backwards so if deleting multiple rows from table, it won't affect later row numbers
+        for (int i = rowNums.size() - 1; i >= 0; i--)  
+        {
+            cartModel.removeRow(rowNums.get(i));
+        }
         cartModel.fireTableDataChanged();
         totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
         changeHeader();
@@ -983,6 +991,11 @@ public class MainPage extends javax.swing.JFrame {
         Object[] data = {item.getProduct().getItemName(), item.getQuantity(), item.getProduct().getItemPrice(), item.getProduct().getItemPrice() * item.getQuantity(), false};
         cartModel.addRow(data);
             
+    }
+    
+    public static LacysEntityManager getEManager()
+    {
+        return eManager;
     }
     
     
