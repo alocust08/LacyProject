@@ -43,6 +43,7 @@ public class MainPage extends javax.swing.JFrame {
     private static DefaultTableModel cartModel; //This is the model to go with the cart table
     private static AddToCartPopUp addCart; //This popup window confirms adding an item to cart
     private static CheckReviewsPopUp checkReviews; //This popup window shows product reviews
+    private static ProductUpdatePopUp productUpdate; //This pop up windows allows admins to update product information
     private static LacysEntityManager eManager; //Class to handle inventory requests
     
     private Connection connection; //Temporary while using regular database stuff
@@ -56,9 +57,11 @@ public class MainPage extends javax.swing.JFrame {
         cartModel = (DefaultTableModel)cartTable.getModel();
         addCart = new AddToCartPopUp();
         checkReviews = new CheckReviewsPopUp();
+        productUpdate = new ProductUpdatePopUp();
        
         desktop.add(addCart);
         desktop.add(checkReviews);
+        desktop.add(productUpdate);
         try
 		{
 			// load database driver class
