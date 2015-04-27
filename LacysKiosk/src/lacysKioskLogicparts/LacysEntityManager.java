@@ -40,6 +40,22 @@ public class LacysEntityManager {
         return (List<Inventory>) em.createNamedQuery("Inventory.findByItemCategory").setParameter("itemCategory", category).getResultList();
     }
     
+    public Inventory findProductbyName(String name)
+    {
+        Inventory product;
+        
+        try
+        {
+            product = (Inventory) em.createNamedQuery("Inventory.findByItemName").setParameter("itemName", name).getSingleResult();
+        }
+        catch (Exception ex)
+        {
+            product = null;
+        }
+        
+        return product;
+    }
+    
     public Users findUser(String name)
     {
         Users tempUser;

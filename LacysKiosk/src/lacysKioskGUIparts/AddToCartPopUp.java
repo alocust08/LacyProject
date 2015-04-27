@@ -146,6 +146,7 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
     private void confirmAddCartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmAddCartButtonActionPerformed
         //Add the product to user's cart and close pop up window
         ShoppingCart aCart = MainPage.getCart();
+        boolean added = false;
         int num = Integer.parseInt(quantityTextField.getText()); //Get quantity in case user changed number
         if (aCart.getCart().containsKey(product.getItemID()))
         {
@@ -155,19 +156,24 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
         else if (num > 1)
         {
             aCart.addMultipleItems(product.getItemID(), product, num);
+            added = true;
         }
         else if (num == 1)
         {
             aCart.addItem(product.getItemID(), product);
+            added = true;
         }
         else 
         {
             String addMsg = "There is nothing to add to your cart.";
             JOptionPane.showMessageDialog(null, addMsg,"No Product", JOptionPane.ERROR_MESSAGE);
         }
-        //Add to cart list for table on cart card
-        MainPage.addToCartList(new ShoppingCartItem(product, Integer.parseInt(quantityTextField.getText())));
-        HeaderPanel.setNumInCartLabel(MainPage.getCart().getNumItems()); //update cart amount number in header
+        //If an item was added, Add to cart list for table on cart card
+        if (added)
+        {
+            MainPage.addToCartList(new ShoppingCartItem(product, Integer.parseInt(quantityTextField.getText())));
+            HeaderPanel.setNumInCartLabel(MainPage.getCart().getNumItems()); //update cart amount number in header
+        }
         setVisible(false); //make this popup not visible again
     }//GEN-LAST:event_confirmAddCartButtonActionPerformed
 

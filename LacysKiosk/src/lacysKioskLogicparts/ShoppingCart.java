@@ -17,8 +17,9 @@ import java.util.Set;
 public class ShoppingCart {
     
     HashMap < Integer, ShoppingCartItem> cart = null; //Hashmap to hold cart items, product ID is the key
-    double subtotal, total;
-    int numItems; 
+    double subtotal, total, shipCost;
+    int numItems;
+    double salesTax = 0.06;
     
     public ShoppingCart() 
     {
@@ -27,6 +28,7 @@ public class ShoppingCart {
         subtotal = 0;
         total = 0;
         numItems = 0;
+        shipCost = 0;
     }
 
     public List<ShoppingCartItem> getCartItems()
@@ -87,6 +89,13 @@ public class ShoppingCart {
         calcUpdate();
     }
     
+    public void updateItem(int prodID, int amount)
+    {
+        ShoppingCartItem cartItem = cart.get(prodID);
+        cartItem.setQuantity(amount);
+        calcUpdate();
+    }
+    
     public void updateCart()
     {
         //Figure this out !!!!!!!!!!
@@ -120,6 +129,11 @@ public class ShoppingCart {
         setNumItems(calcNumItems());
     }
     
+    public double calcGrandTotal(){
+        double theTotal = subtotal + (subtotal * salesTax) + shipCost;
+        setTotal(theTotal);
+        return theTotal;
+    }
     public void clear()
     {
         cart.clear();
@@ -144,6 +158,14 @@ public class ShoppingCart {
     public int getNumItems() {
         return numItems;
     }
+    
+    public double getShipCost() {
+        return shipCost;
+    }
+    
+    public double getSalesTax() {
+        return salesTax;
+    }
 
     //Setters
     public void setSubtotal(double subtotal) {
@@ -156,6 +178,10 @@ public class ShoppingCart {
 
     public void setNumItems(int numItems) {
         this.numItems = numItems;
+    }
+    
+    public void setShipCost(double shipCost) {
+        this.shipCost = shipCost;
     }
     
 }

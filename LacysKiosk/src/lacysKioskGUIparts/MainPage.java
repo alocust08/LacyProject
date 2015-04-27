@@ -135,10 +135,10 @@ public class MainPage extends javax.swing.JFrame {
         orderPanel = new javax.swing.JPanel();
         orderLabel = new javax.swing.JLabel();
         shippingComboBox = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        subTotalLabel = new javax.swing.JLabel();
+        shipCostLabel = new javax.swing.JLabel();
+        taxesLabel = new javax.swing.JLabel();
+        grandTotalLabel = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -419,14 +419,14 @@ public class MainPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item", "Quantity", "Price", "Remove"
+                "Item", "Quantity", "Price", "Total", "Remove"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, true
+                false, true, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -454,6 +454,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        totalLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalLabel.setText("Total: $##.##");
 
         updateButton.setText("Update Cart");
@@ -504,7 +505,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addGroup(cartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(checkOutButton)
                     .addComponent(clearButton))
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         middlePanel.add(cartPanel, "cartCard");
@@ -515,21 +516,21 @@ public class MainPage extends javax.swing.JFrame {
         orderLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         orderLabel.setText("Order");
 
-        shippingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Add Shipping", "Ship to Store - $#.##", "Ship to Home - $#.##" }));
+        shippingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Add Shipping", "Ship to Store - Free", "Ship to Home - $10.00" }));
         shippingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 shippingComboBoxActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("Subtotal: $#.##");
+        subTotalLabel.setText("Subtotal: $#.##");
 
-        jLabel5.setText("Shipping: $#.##");
+        shipCostLabel.setText("Shipping: $#.##");
 
-        jLabel6.setText("Taxes: $#.##");
+        taxesLabel.setText("Taxes: $#.##");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("Total: $#.##");
+        grandTotalLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        grandTotalLabel.setText("Total: $#.##");
 
         jLabel8.setText("Credit card number:");
 
@@ -600,17 +601,17 @@ public class MainPage extends javax.swing.JFrame {
                         .addComponent(jScrollPane3)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderPanelLayout.createSequentialGroup()
-                        .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(orderPanelLayout.createSequentialGroup()
-                                .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)))
+                        .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(orderPanelLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel7)))
+                                .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(taxesLabel)
+                                    .addComponent(subTotalLabel)
+                                    .addComponent(shipCostLabel)
+                                    .addComponent(grandTotalLabel)))
+                            .addGroup(orderPanelLayout.createSequentialGroup()
+                                .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderPanelLayout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -650,13 +651,13 @@ public class MainPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(subTotalLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addComponent(taxesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(shipCostLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(grandTotalLabel)
                 .addGap(18, 18, 18)
                 .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -767,28 +768,97 @@ public class MainPage extends javax.swing.JFrame {
         //When click check out button, go to check out page/card
         CardLayout cl = (CardLayout)(middlePanel.getLayout());
         cl.show(middlePanel, "orderCard");
+        
+        String orderText = "";
+        orderText = "        Item Name                    Quantity        Price           Total Price\n";
+        orderText += "-----------------------------------  -------------     -----------     -----------------\n";
+        for (int i = 0; i < cartModel.getRowCount (); i++)
+        {
+            String name = cartModel.getValueAt(i, 0).toString();
+            int amount = (int) cartModel.getValueAt(i, 1);
+            double price = (double) cartModel.getValueAt(i, 2);
+            orderText += String.format("%-45s  %-16d  $%-12.2f  %-12.2f\n", name, amount, price, amount * price);
+        }
+        itemsTextArea.setText(orderText);
+        subTotalLabel.setText(String.format("Subtotal: $%.2f", cart.getTotal()));
+        taxesLabel.setText(String.format("Sales Tax: $%.2f", cart.getTotal() * cart.getSalesTax()));  //Hard coded sales tax rate in
+        shipCostLabel.setText(String.format("Shipping Cost: $%.2f", 0.00));
+        grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        cart.setShipCost(0.00);
 
     }//GEN-LAST:event_checkOutButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         // TODO add your handling code here:
         //Go through actions to create new user and add to database
+       
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
         //Checks if any checkboxes are checked or unchecked and then deletes the ones
         //that are checked from cart
+        int numRows = cartModel.getRowCount();
+         for (int row = 0; row < numRows; row++)
+        {
+            String prodName = cartModel.getValueAt(row, 0).toString();
+            Inventory product = eManager.findProductbyName(prodName);
+            if ((boolean) cartModel.getValueAt(row, 4) || (int) cartModel.getValueAt(row, 1) == 0)
+            {
+                //remove row from cart table list and cart map
+                if (product != null)
+                {
+                    cart.removeItem(product.getItemID());
+                    cartModel.removeRow(row);
+                }
+            }
+            else
+            {
+                //get object info from cart and update cart map
+                if (product != null)
+                {
+                    cart.updateItem(product.getItemID(), (int) cartModel.getValueAt(row, 1));
+                    cartModel.setValueAt((int) cartModel.getValueAt(row, 1) * (double) cartModel.getValueAt(row, 2) , row, 3);
+                }
+                
+            }
+        
+        }
+         
+        cartModel.fireTableDataChanged();
+        totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
+        changeHeader();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         // TODO add your handling code here:
         //This button will clear all the items currently in the cart and return to the home page maybe?
+        int numRows = cartModel.getRowCount();
+        for (int i = numRows - 1; i >= 0; i--)
+        {   
+            cartModel.removeRow(i);
+        }
+        cartModel.fireTableDataChanged();
+        cart.clear();
+        totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
+        changeHeader();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void shippingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shippingComboBoxActionPerformed
-        // TODO add your handling code here:
-        //Add cost of shipping to the labels that keep track of totals of order
+        String shipChoice = shippingComboBox.getSelectedItem().toString();
+        if (shipChoice.equals("Ship to Store - Free"))
+        {
+            cart.setShipCost(0.00);
+            shipCostLabel.setText(String.format("Shipping Cost: $%.2f", cart.getShipCost()));
+            grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        }
+        else if (shipChoice.equals("Ship to Home - $10.00"))
+        {
+            cart.setShipCost(10.00);
+            shipCostLabel.setText(String.format("Shipping Cost: $%.2f", cart.getShipCost()));
+            grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        }
+        
     }//GEN-LAST:event_shippingComboBoxActionPerformed
 
     private void orderCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderCancelButtonActionPerformed
@@ -910,7 +980,7 @@ public class MainPage extends javax.swing.JFrame {
     
     public static void addToCartList(ShoppingCartItem item)
     {
-        Object[] data = {item.getProduct().getItemName(), item.getQuantity(), item.getProduct().getItemPrice(), false};
+        Object[] data = {item.getProduct().getItemName(), item.getQuantity(), item.getProduct().getItemPrice(), item.getProduct().getItemPrice() * item.getQuantity(), false};
         cartModel.addRow(data);
             
     }
@@ -963,6 +1033,7 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel feedbackLabel;
     private javax.swing.JButton feedbackSubmitButton;
     private javax.swing.JTextArea feedbackText;
+    private javax.swing.JLabel grandTotalLabel;
     private lacysKioskGUIparts.HeaderPanel headerPanel2;
     private javax.swing.JPanel homePagePanel;
     private javax.swing.JTextArea itemsTextArea;
@@ -974,10 +1045,6 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1009,9 +1076,12 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JButton placeOrderButton;
     private javax.swing.JPanel productViewPanel;
     private javax.swing.JPanel rightSidePanel;
+    private javax.swing.JLabel shipCostLabel;
     private javax.swing.JComboBox shippingComboBox;
     private javax.swing.JLabel shoppingLabel;
     private javax.swing.JLabel storeNameLabel;
+    private javax.swing.JLabel subTotalLabel;
+    private javax.swing.JLabel taxesLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
