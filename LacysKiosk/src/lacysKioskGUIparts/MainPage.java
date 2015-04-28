@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import lacysKioskLogicparts.Account;
 import lacysKioskLogicparts.Inventory;
 import lacysKioskLogicparts.LacysEntityManager;
+import lacysKioskLogicparts.Products;
 import lacysKioskLogicparts.ShoppingCart;
 import lacysKioskLogicparts.ShoppingCartItem;
 import lacysKioskLogicparts.Users;
@@ -36,7 +37,7 @@ import lacysKioskLogicparts.Users;
 public class MainPage extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.sqlite.JDBC";
-    public static final String DATABASE_URL = "jdbc:sqlite:C:\\Data\\lacys"; 
+    public static final String DATABASE_URL = "jdbc:sqlite:C:\\Data\\Lacys"; 
     private static Account user = new Account(); //Testing user until switch to entity class version
     private static Users currentUser = new Users(); //Holds the current user in the system
     private static ShoppingCart cart = new ShoppingCart();  //Holds shopping cart for user
@@ -807,13 +808,13 @@ public class MainPage extends javax.swing.JFrame {
         for (int row = 0; row < numRows; row++)
         {
             String prodName = cartModel.getValueAt(row, 0).toString();
-            Inventory product = eManager.findProductbyName(prodName);
+            Products product = eManager.findProductbyName(prodName);
             if ((boolean) cartModel.getValueAt(row, 4) || (int) cartModel.getValueAt(row, 1) == 0)
             {
                 //remove row from cart table list and cart map
                 if (product != null)
                 {
-                    cart.removeItem(product.getItemID());
+                    cart.removeItem(product.getProductID());
                     //cartModel.removeRow(row);
                     rowNums.add(row);
                 }
@@ -823,7 +824,7 @@ public class MainPage extends javax.swing.JFrame {
                 //get object info from cart and update cart map
                 if (product != null)
                 {
-                    cart.updateItem(product.getItemID(), (int) cartModel.getValueAt(row, 1));
+                    cart.updateItem(product.getProductID(), (int) cartModel.getValueAt(row, 1));
                     cartModel.setValueAt((int) cartModel.getValueAt(row, 1) * (double) cartModel.getValueAt(row, 2) , row, 3);
                 }
                 
@@ -842,7 +843,6 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        // TODO add your handling code here:
         //This button will clear all the items currently in the cart and return to the home page maybe?
         int numRows = cartModel.getRowCount();
         for (int i = numRows - 1; i >= 0; i--)
@@ -909,12 +909,12 @@ public class MainPage extends javax.swing.JFrame {
         if (selectedPage.equals("All"))
         {
             header.setText("ALL");
-            List<Inventory> browsedProducts = eManager.getAllProducts(); //Get list of products to browse
+            List<Products> browsedProducts = eManager.getAllProducts(); //Get list of products to browse
             ListIterator iter = browsedProducts.listIterator();
             
             while (iter.hasNext())
             {
-                Inventory product = (Inventory) iter.next();
+                Products product = (Products) iter.next();
                 viewPanel.add(new ProductPanel(product));
             }
         }
@@ -922,12 +922,12 @@ public class MainPage extends javax.swing.JFrame {
         else if (selectedPage.equals("Home"))
         {
             header.setText("HOME");
-            List<Inventory> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
+            List<Products> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
             ListIterator iter = browsedProducts.listIterator();
 
             while (iter.hasNext())
             {
-                Inventory product = (Inventory) iter.next();
+                Products product = (Products) iter.next();
                 viewPanel.add(new ProductPanel(product));
             }  
         }
@@ -935,21 +935,27 @@ public class MainPage extends javax.swing.JFrame {
         else if (selectedPage.equals("Clothes"))
         {
             header.setText("CLOTHES");
-            selectedPage = "Apparel";
-            List<Inventory> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
+            List<Products> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
             ListIterator iter = browsedProducts.listIterator();
 
             while (iter.hasNext())
             {
-                Inventory product = (Inventory) iter.next();
+                Products product = (Products) iter.next();
                 viewPanel.add(new ProductPanel(product));
             }    
         }
         
         else if (selectedPage.equals("Kitchen"))
         {
-            //No kitchen stuff to search yet
-            //Add option for if no results returned
+            header.setText("KITCHEN");
+            List<Products> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
+            ListIterator iter = browsedProducts.listIterator();
+
+            while (iter.hasNext())
+            {
+                Products product = (Products) iter.next();
+                viewPanel.add(new ProductPanel(product));
+            }    
         }
         scrollpanel.setViewportView(viewPanel);
         productViewPanel.add(scrollpanel);
@@ -991,7 +997,7 @@ public class MainPage extends javax.swing.JFrame {
     
     public static void addToCartList(ShoppingCartItem item)
     {
-        Object[] data = {item.getProduct().getItemName(), item.getQuantity(), item.getProduct().getItemPrice(), item.getProduct().getItemPrice() * item.getQuantity(), false};
+        Object[] data = {item.getProduct().getProductName(), item.getQuantity(), item.getProduct().getUnitPrice(), item.getProduct().getUnitPrice() * item.getQuantity(), false};
         cartModel.addRow(data);
             
     }

@@ -29,24 +29,24 @@ public class LacysEntityManager {
         em = emf.createEntityManager();
     }
     
-    public List<Inventory> getAllProducts()
+    public List<Products> getAllProducts()
     {
-        return (List<Inventory>) em.createNamedQuery("Inventory.findAll").getResultList();
+        return (List<Products>) em.createNamedQuery("Products.findAll").getResultList();
         
     }
     
-    public List<Inventory> getProductsByCategory(String category)
+    public List<Products> getProductsByCategory(String category)
     {
-        return (List<Inventory>) em.createNamedQuery("Inventory.findByItemCategory").setParameter("itemCategory", category).getResultList();
+        return (List<Products>) em.createNamedQuery("Products.findByCategory").setParameter("category", category).getResultList();
     }
     
-    public Inventory findProductbyName(String name)
+    public Products findProductbyName(String name)
     {
-        Inventory product;
+        Products product;
         
         try
         {
-            product = (Inventory) em.createNamedQuery("Inventory.findByItemName").setParameter("itemName", name).getSingleResult();
+            product = (Products) em.createNamedQuery("Products.findByProductName").setParameter("productName", name).getSingleResult();
         }
         catch (Exception ex)
         {
@@ -56,10 +56,10 @@ public class LacysEntityManager {
         return product;
     }
     
-    public List<Messages> getReviewsByProduct(int prodId)
+    /*public List<Messages> getReviewsByProduct(int prodId)
     {
         return (List<Messages>) em.createNamedQuery("Messages.findByTarget").setParameter("target", prodId).getResultList(); 
-    }
+    }*/
     
     public Users findUserByID(int userID)
     {

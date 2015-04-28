@@ -76,7 +76,8 @@ public class ReviewPanel extends javax.swing.JPanel {
 
     public void setUpReviewPanel(Messages review, double rating)
     {
-        String username = MainPage.getEManager().findUserByID(review.getUserID()).getUserName(); 
+        //String username = MainPage.getEManager().findUserByID(review.getUserID()).getUserName(); 
+        String username = review.getUserID().getUserName();
         
         reviewerUsernameLabel.setText(username);
         reviewRater.setRating((float) rating);
