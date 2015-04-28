@@ -5,13 +5,29 @@
  */
 package lacysKioskGUIparts;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import javax.swing.BoxLayout;
+import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 import lacysKioskLogicparts.Account;
+import lacysKioskLogicparts.Inventory;
+import lacysKioskLogicparts.LacysEntityManager;
+import lacysKioskLogicparts.ShoppingCart;
+import lacysKioskLogicparts.ShoppingCartItem;
+import lacysKioskLogicparts.Users;
 
 /**
  *
@@ -20,16 +36,32 @@ import lacysKioskLogicparts.Account;
 public class MainPage extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.sqlite.JDBC";
-    public static final String DATABASE_URL = "jdbc:sqlite:C:\\Data\\lacys";
-    private static Account user = new Account();
+    public static final String DATABASE_URL = "jdbc:sqlite:C:\\Data\\lacys"; 
+    private static Account user = new Account(); //Testing user until switch to entity class version
+    private static Users currentUser = new Users(); //Holds the current user in the system
+    private static ShoppingCart cart = new ShoppingCart();  //Holds shopping cart for user
+    private static DefaultTableModel cartModel; //This is the model to go with the cart table
+    private static AddToCartPopUp addCart; //This popup window confirms adding an item to cart
+    private static CheckReviewsPopUp checkReviews; //This popup window shows product reviews
+    private static ProductUpdatePopUp productUpdate; //This pop up windows allows admins to update product information
+    private static LacysEntityManager eManager; //Class to handle inventory requests
     
-    private Connection connection;
-    private Statement statement;
+    private Connection connection; //Temporary while using regular database stuff
+    private Statement statement; //Temporary while using regular database stuff
     /**
      * Creates new form MainPage
      */
     public MainPage() {
         initComponents();
+        eManager = new LacysEntityManager();
+        cartModel = (DefaultTableModel)cartTable.getModel();
+        addCart = new AddToCartPopUp();
+        checkReviews = new CheckReviewsPopUp();
+        productUpdate = new ProductUpdatePopUp();
+       
+        desktop.add(addCart);
+        desktop.add(checkReviews);
+        desktop.add(productUpdate);
         try
 		{
 			// load database driver class
@@ -68,6 +100,7 @@ public class MainPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        desktop = new javax.swing.JDesktopPane();
         leftSidePanel = new javax.swing.JPanel();
         pagesLabel = new javax.swing.JLabel();
         pagesBoxLabel = new javax.swing.JLabel();
@@ -98,7 +131,7 @@ public class MainPage extends javax.swing.JFrame {
         cartPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        cartTable = new javax.swing.JTable();
         checkOutButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         totalLabel = new javax.swing.JLabel();
@@ -106,10 +139,10 @@ public class MainPage extends javax.swing.JFrame {
         orderPanel = new javax.swing.JPanel();
         orderLabel = new javax.swing.JLabel();
         shippingComboBox = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        subTotalLabel = new javax.swing.JLabel();
+        shipCostLabel = new javax.swing.JLabel();
+        taxesLabel = new javax.swing.JLabel();
+        grandTotalLabel = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -128,7 +161,6 @@ public class MainPage extends javax.swing.JFrame {
         jTextField8 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         itemsTextArea = new javax.swing.JTextArea();
-        jPanel1 = new javax.swing.JPanel();
         headerPanel2 = new lacysKioskGUIparts.HeaderPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -186,6 +218,11 @@ public class MainPage extends javax.swing.JFrame {
         shoppingLabel.setText("Shopping");
 
         categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Home", "Clothes", "Kitchen" }));
+        categoryComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryComboBoxActionPerformed(evt);
+            }
+        });
 
         categoryBoxLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         categoryBoxLabel.setText("Browse Category:");
@@ -205,7 +242,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightSidePanelLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(categoryBoxLabel)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         rightSidePanelLayout.setVerticalGroup(
             rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,22 +418,19 @@ public class MainPage extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setText("My Cart");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        cartTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Item", "Quantity", "Price", "Remove"
+                "Item", "Quantity", "Price", "Total", "Remove"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, true, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -407,7 +441,8 @@ public class MainPage extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        cartTable.setName(""); // NOI18N
+        jScrollPane2.setViewportView(cartTable);
 
         checkOutButton.setText("Check Out");
         checkOutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -423,6 +458,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        totalLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalLabel.setText("Total: $##.##");
 
         updateButton.setText("Update Cart");
@@ -473,7 +509,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addGroup(cartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(checkOutButton)
                     .addComponent(clearButton))
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         middlePanel.add(cartPanel, "cartCard");
@@ -484,21 +520,21 @@ public class MainPage extends javax.swing.JFrame {
         orderLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         orderLabel.setText("Order");
 
-        shippingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Add Shipping", "Ship to Store - $#.##", "Ship to Home - $#.##" }));
+        shippingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Add Shipping", "Ship to Store - Free", "Ship to Home - $10.00" }));
         shippingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 shippingComboBoxActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("Subtotal: $#.##");
+        subTotalLabel.setText("Subtotal: $#.##");
 
-        jLabel5.setText("Shipping: $#.##");
+        shipCostLabel.setText("Shipping: $#.##");
 
-        jLabel6.setText("Taxes: $#.##");
+        taxesLabel.setText("Taxes: $#.##");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("Total: $#.##");
+        grandTotalLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        grandTotalLabel.setText("Total: $#.##");
 
         jLabel8.setText("Credit card number:");
 
@@ -569,17 +605,17 @@ public class MainPage extends javax.swing.JFrame {
                         .addComponent(jScrollPane3)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderPanelLayout.createSequentialGroup()
-                        .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(orderPanelLayout.createSequentialGroup()
-                                .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)))
+                        .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(orderPanelLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel7)))
+                                .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(taxesLabel)
+                                    .addComponent(subTotalLabel)
+                                    .addComponent(shipCostLabel)
+                                    .addComponent(grandTotalLabel)))
+                            .addGroup(orderPanelLayout.createSequentialGroup()
+                                .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderPanelLayout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -619,13 +655,13 @@ public class MainPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(shippingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(subTotalLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addComponent(taxesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(shipCostLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(grandTotalLabel)
                 .addGap(18, 18, 18)
                 .addGroup(orderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -659,16 +695,38 @@ public class MainPage extends javax.swing.JFrame {
 
         middlePanel.add(orderPanel, "orderCard");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 96, Short.MAX_VALUE)
+        javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
+        desktop.setLayout(desktopLayout);
+        desktopLayout.setHorizontalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(desktopLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(headerPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(desktopLayout.createSequentialGroup()
+                        .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 45, Short.MAX_VALUE)
+        desktopLayout.setVerticalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(desktopLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(headerPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(leftSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
+        desktop.setLayer(leftSidePanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktop.setLayer(rightSidePanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktop.setLayer(middlePanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        desktop.setLayer(headerPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -676,34 +734,12 @@ public class MainPage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(headerPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(desktop)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(headerPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
-                    .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(leftSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
+            .addComponent(desktop, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -711,6 +747,7 @@ public class MainPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pagesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagesComboBoxActionPerformed
+        //From the combo box on the left, go to specific pages/cards in card layout of middle panel
         CardLayout cl = (CardLayout)(middlePanel.getLayout());
         String selectedPage = (String)pagesComboBox.getSelectedItem();
         
@@ -725,35 +762,114 @@ public class MainPage extends javax.swing.JFrame {
         else if (selectedPage.equals("My Cart"))
         {
             cl.show(middlePanel, "cartCard");
+            totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
+            changeHeader();
         }
         
     }//GEN-LAST:event_pagesComboBoxActionPerformed
 
     private void checkOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOutButtonActionPerformed
+        //When click check out button, go to check out page/card
         CardLayout cl = (CardLayout)(middlePanel.getLayout());
         cl.show(middlePanel, "orderCard");
+        
+        String orderText = "";
+        orderText = "        Item Name                    Quantity        Price           Total Price\n";
+        orderText += "-----------------------------------  -------------     -----------     -----------------\n";
+        for (int i = 0; i < cartModel.getRowCount (); i++)
+        {
+            String name = cartModel.getValueAt(i, 0).toString();
+            int amount = (int) cartModel.getValueAt(i, 1);
+            double price = (double) cartModel.getValueAt(i, 2);
+            orderText += String.format("%-45s  %-16d  $%-12.2f  %-12.2f\n", name, amount, price, amount * price);
+        }
+        itemsTextArea.setText(orderText);
+        subTotalLabel.setText(String.format("Subtotal: $%.2f", cart.getTotal()));
+        taxesLabel.setText(String.format("Sales Tax: $%.2f", cart.getTotal() * cart.getSalesTax()));  //Hard coded sales tax rate in
+        shipCostLabel.setText(String.format("Shipping Cost: $%.2f", 0.00));
+        grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        cart.setShipCost(0.00);
 
     }//GEN-LAST:event_checkOutButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         // TODO add your handling code here:
         //Go through actions to create new user and add to database
+       
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
         //Checks if any checkboxes are checked or unchecked and then deletes the ones
         //that are checked from cart
+        ArrayList<Integer> rowNums = new ArrayList<Integer>(); //holds row numbers that need to be deleted
+        int numRows = cartModel.getRowCount();
+        for (int row = 0; row < numRows; row++)
+        {
+            String prodName = cartModel.getValueAt(row, 0).toString();
+            Inventory product = eManager.findProductbyName(prodName);
+            if ((boolean) cartModel.getValueAt(row, 4) || (int) cartModel.getValueAt(row, 1) == 0)
+            {
+                //remove row from cart table list and cart map
+                if (product != null)
+                {
+                    cart.removeItem(product.getItemID());
+                    //cartModel.removeRow(row);
+                    rowNums.add(row);
+                }
+            }
+            else
+            {
+                //get object info from cart and update cart map
+                if (product != null)
+                {
+                    cart.updateItem(product.getItemID(), (int) cartModel.getValueAt(row, 1));
+                    cartModel.setValueAt((int) cartModel.getValueAt(row, 1) * (double) cartModel.getValueAt(row, 2) , row, 3);
+                }
+                
+            }
+        
+        }
+        
+        //Go backwards so if deleting multiple rows from table, it won't affect later row numbers
+        for (int i = rowNums.size() - 1; i >= 0; i--)  
+        {
+            cartModel.removeRow(rowNums.get(i));
+        }
+        cartModel.fireTableDataChanged();
+        totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
+        changeHeader();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         // TODO add your handling code here:
         //This button will clear all the items currently in the cart and return to the home page maybe?
+        int numRows = cartModel.getRowCount();
+        for (int i = numRows - 1; i >= 0; i--)
+        {   
+            cartModel.removeRow(i);
+        }
+        cartModel.fireTableDataChanged();
+        cart.clear();
+        totalLabel.setText(String.format("Total: $%,.2f", cart.getTotal()));
+        changeHeader();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void shippingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shippingComboBoxActionPerformed
-        // TODO add your handling code here:
-        //Add cost of shipping to the labels that keep track of totals of order
+        String shipChoice = shippingComboBox.getSelectedItem().toString();
+        if (shipChoice.equals("Ship to Store - Free"))
+        {
+            cart.setShipCost(0.00);
+            shipCostLabel.setText(String.format("Shipping Cost: $%.2f", cart.getShipCost()));
+            grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        }
+        else if (shipChoice.equals("Ship to Home - $10.00"))
+        {
+            cart.setShipCost(10.00);
+            shipCostLabel.setText(String.format("Shipping Cost: $%.2f", cart.getShipCost()));
+            grandTotalLabel.setText(String.format("Total:     $%.2f", cart.calcGrandTotal()));
+        }
+        
     }//GEN-LAST:event_shippingComboBoxActionPerformed
 
     private void orderCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderCancelButtonActionPerformed
@@ -771,10 +887,118 @@ public class MainPage extends javax.swing.JFrame {
         //Submit feedback from user
     }//GEN-LAST:event_feedbackSubmitButtonActionPerformed
 
+    private void categoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryComboBoxActionPerformed
+        //Go to correct category browsing based off combo box selection
+        String selectedPage = (String)categoryComboBox.getSelectedItem();
+        
+        CardLayout cl = (CardLayout)(middlePanel.getLayout());
+        cl.show(middlePanel, "productsCard");
+        
+        productViewPanel.removeAll(); //clear everything from panel from possible previous browse
+        JPanel viewPanel = new JPanel();
+        viewPanel.setSize(productViewPanel.getWidth(), productViewPanel.getHeight());
+        viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollpanel = new JScrollPane(); //Scrollpanel so can see all products shown
+        scrollpanel.setSize(productViewPanel.getWidth(), productViewPanel.getHeight());
+        
+        JLabel header = new JLabel();
+        header.setFont(new Font("Tahoma", Font.BOLD, 20));
+        viewPanel.add(header);
+
+        //For each product matching selected category, create and add new product panel with info
+        if (selectedPage.equals("All"))
+        {
+            header.setText("ALL");
+            List<Inventory> browsedProducts = eManager.getAllProducts(); //Get list of products to browse
+            ListIterator iter = browsedProducts.listIterator();
+            
+            while (iter.hasNext())
+            {
+                Inventory product = (Inventory) iter.next();
+                viewPanel.add(new ProductPanel(product));
+            }
+        }
+        
+        else if (selectedPage.equals("Home"))
+        {
+            header.setText("HOME");
+            List<Inventory> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
+            ListIterator iter = browsedProducts.listIterator();
+
+            while (iter.hasNext())
+            {
+                Inventory product = (Inventory) iter.next();
+                viewPanel.add(new ProductPanel(product));
+            }  
+        }
+        
+        else if (selectedPage.equals("Clothes"))
+        {
+            header.setText("CLOTHES");
+            selectedPage = "Apparel";
+            List<Inventory> browsedProducts = eManager.getProductsByCategory(selectedPage); //Get list of products to browse
+            ListIterator iter = browsedProducts.listIterator();
+
+            while (iter.hasNext())
+            {
+                Inventory product = (Inventory) iter.next();
+                viewPanel.add(new ProductPanel(product));
+            }    
+        }
+        
+        else if (selectedPage.equals("Kitchen"))
+        {
+            //No kitchen stuff to search yet
+            //Add option for if no results returned
+        }
+        scrollpanel.setViewportView(viewPanel);
+        productViewPanel.add(scrollpanel);
+        productViewPanel.revalidate();
+        productViewPanel.repaint();
+    }//GEN-LAST:event_categoryComboBoxActionPerformed
+
     
     public static void setUser(Account aUser)
     {
         user = aUser;
+    }
+    
+    public static void clearCart()
+    {
+        cart.clear();
+    }
+    
+   
+    public static ShoppingCart getCart()
+    {
+        return cart;
+    }
+    
+    public static AddToCartPopUp getCartPopUp()
+    {
+        return addCart;
+    }
+    
+    public static CheckReviewsPopUp getReviewsPopUp()
+    {
+        return checkReviews;
+    }
+    
+    public void changeHeader()
+    {
+        HeaderPanel.setNumInCartLabel(cart.getNumItems());
+    }
+    
+    public static void addToCartList(ShoppingCartItem item)
+    {
+        Object[] data = {item.getProduct().getItemName(), item.getQuantity(), item.getProduct().getItemPrice(), item.getProduct().getItemPrice() * item.getQuantity(), false};
+        cartModel.addRow(data);
+            
+    }
+    
+    public static LacysEntityManager getEManager()
+    {
+        return eManager;
     }
     
     
@@ -815,14 +1039,17 @@ public class MainPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cartPanel;
+    private javax.swing.JTable cartTable;
     private javax.swing.JLabel categoryBoxLabel;
     private javax.swing.JComboBox categoryComboBox;
     private javax.swing.JButton checkOutButton;
     private javax.swing.JButton clearButton;
     private javax.swing.JButton createButton;
+    private javax.swing.JDesktopPane desktop;
     private javax.swing.JLabel feedbackLabel;
     private javax.swing.JButton feedbackSubmitButton;
     private javax.swing.JTextArea feedbackText;
+    private javax.swing.JLabel grandTotalLabel;
     private lacysKioskGUIparts.HeaderPanel headerPanel2;
     private javax.swing.JPanel homePagePanel;
     private javax.swing.JTextArea itemsTextArea;
@@ -834,17 +1061,11 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -871,9 +1092,12 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JButton placeOrderButton;
     private javax.swing.JPanel productViewPanel;
     private javax.swing.JPanel rightSidePanel;
+    private javax.swing.JLabel shipCostLabel;
     private javax.swing.JComboBox shippingComboBox;
     private javax.swing.JLabel shoppingLabel;
     private javax.swing.JLabel storeNameLabel;
+    private javax.swing.JLabel subTotalLabel;
+    private javax.swing.JLabel taxesLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables

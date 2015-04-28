@@ -5,17 +5,25 @@
  */
 package lacysKioskGUIparts;
 
+import javax.swing.JOptionPane;
+import lacysKioskLogicparts.Inventory;
+import lacysKioskLogicparts.ShoppingCart;
+import lacysKioskLogicparts.ShoppingCartItem;
+
 /**
  *
  * @author Alisha
  */
 public class AddToCartPopUp extends javax.swing.JInternalFrame {
 
+    Inventory product; //Variable to hold product for pop up
+    
     /**
      * Creates new form AddToCartPopUp
      */
     public AddToCartPopUp() {
         initComponents();
+        setVisible(false); //Not visible until needed
     }
 
     /**
@@ -35,6 +43,7 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
         inventoryLabel = new javax.swing.JLabel();
         confirmAddCartButton = new javax.swing.JButton();
         addCartCancelButton = new javax.swing.JButton();
+        quantityTextField = new javax.swing.JTextField();
 
         setTitle("Add Item To Cart");
 
@@ -44,7 +53,7 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
         addItemNameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         addItemNameLabel.setText("Product Name Here");
 
-        quantityLabel.setText("Quantity: XX");
+        quantityLabel.setText("Quantity: ");
 
         priceLabel.setText("Price: $X.XX");
 
@@ -66,6 +75,12 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
             }
         });
 
+        quantityTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,7 +93,10 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
                             .addComponent(totalLabel)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(quantityLabel)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(quantityLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(69, 69, 69)
                                         .addComponent(confirmAddCartButton)))
@@ -109,7 +127,8 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantityLabel)
-                    .addComponent(inventoryLabel))
+                    .addComponent(inventoryLabel)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(priceLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -125,15 +144,59 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmAddCartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmAddCartButtonActionPerformed
-        // TODO add your handling code here:
         //Add the product to user's cart and close pop up window
+        ShoppingCart aCart = MainPage.getCart();
+        boolean added = false;
+        int num = Integer.parseInt(quantityTextField.getText()); //Get quantity in case user changed number
+        if (aCart.getCart().containsKey(product.getItemID()))
+        {
+            String addMsg = "That item is already in your cart. Update quantities from your cart view.";
+            JOptionPane.showMessageDialog(null, addMsg,"Already In Cart", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (num > 1)
+        {
+            aCart.addMultipleItems(product.getItemID(), product, num);
+            added = true;
+        }
+        else if (num == 1)
+        {
+            aCart.addItem(product.getItemID(), product);
+            added = true;
+        }
+        else 
+        {
+            String addMsg = "There is nothing to add to your cart.";
+            JOptionPane.showMessageDialog(null, addMsg,"No Product", JOptionPane.ERROR_MESSAGE);
+        }
+        //If an item was added, Add to cart list for table on cart card
+        if (added)
+        {
+            MainPage.addToCartList(new ShoppingCartItem(product, Integer.parseInt(quantityTextField.getText())));
+            HeaderPanel.setNumInCartLabel(MainPage.getCart().getNumItems()); //update cart amount number in header
+        }
+        setVisible(false); //make this popup not visible again
     }//GEN-LAST:event_confirmAddCartButtonActionPerformed
 
     private void addCartCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCartCancelButtonActionPerformed
         // TODO add your handling code here:
         //Close the pop up window but don't add product to cart
+        setVisible(false);
     }//GEN-LAST:event_addCartCancelButtonActionPerformed
 
+    private void quantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityTextFieldActionPerformed
+        //If user enters new value in text field and presses enter, update the total amount label
+        totalLabel.setText(String.format("Total: $%,.2f", product.getItemPrice() * Integer.parseInt(quantityTextField.getText())));
+    }//GEN-LAST:event_quantityTextFieldActionPerformed
+
+    public void setUpAddPopUp(Inventory prod) //Sets up the pop up window with the correct product info
+    {
+        product = prod;
+        addItemNameLabel.setText("ADD: " + product.getItemName());
+        quantityTextField.setText("1");
+        inventoryLabel.setText(String.format("Current Inventory: %d", product.getItemQuantity()));
+        priceLabel.setText(String.format("Price: $%,.2f", product.getItemPrice()));
+        totalLabel.setText(String.format("Total: $%,.2f", product.getItemPrice() * Integer.parseInt(quantityTextField.getText())));   
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCartCancelButton;
@@ -143,6 +206,7 @@ public class AddToCartPopUp extends javax.swing.JInternalFrame {
     private javax.swing.JLabel inventoryLabel;
     private javax.swing.JLabel priceLabel;
     private javax.swing.JLabel quantityLabel;
+    private javax.swing.JTextField quantityTextField;
     private javax.swing.JLabel totalLabel;
     // End of variables declaration//GEN-END:variables
 }

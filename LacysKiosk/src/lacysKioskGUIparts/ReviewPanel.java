@@ -5,6 +5,9 @@
  */
 package lacysKioskGUIparts;
 
+import lacysKioskLogicparts.Inventory;
+import lacysKioskLogicparts.Messages;
+
 /**
  *
  * @author Alisha
@@ -71,6 +74,15 @@ public class ReviewPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setUpReviewPanel(Messages review, double rating)
+    {
+        String username = MainPage.getEManager().findUserByID(review.getUserID()).getUserName(); 
+        
+        reviewerUsernameLabel.setText(username);
+        reviewRater.setRating((float) rating);
+        reviewRater.setEnabled(false);
+        reviewTextArea.setText(review.getContents());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

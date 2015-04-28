@@ -30,7 +30,11 @@
                           <Component id="totalLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="quantityLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="quantityLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="quantityTextField" min="-2" pref="30" max="-2" attributes="0"/>
+                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                                       <Component id="confirmAddCartButton" min="-2" max="-2" attributes="0"/>
@@ -77,6 +81,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="quantityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="inventoryLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="quantityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="priceLabel" min="-2" max="-2" attributes="0"/>
@@ -111,7 +116,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="quantityLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Quantity: XX"/>
+        <Property name="text" type="java.lang.String" value="Quantity: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="priceLabel">
@@ -143,6 +148,11 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCartCancelButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="quantityTextField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="quantityTextFieldActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
