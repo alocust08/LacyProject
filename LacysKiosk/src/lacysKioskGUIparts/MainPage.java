@@ -4,6 +4,8 @@ package lacysKioskGUIparts;
 import java.awt.CardLayout;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.BoxLayout;
@@ -14,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import lacysKioskLogicparts.LacysEntityManager;
 import lacysKioskLogicparts.Messages;
+import lacysKioskLogicparts.OrderDetails;
+import lacysKioskLogicparts.Orders;
 import lacysKioskLogicparts.Products;
 import lacysKioskLogicparts.ShoppingCart;
 import lacysKioskLogicparts.ShoppingCartItem;
@@ -1160,6 +1164,26 @@ public class MainPage extends javax.swing.JFrame {
 
     private void viewOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewOrdersButtonActionPerformed
         // TODO add your handling code here:
+        List<Orders> allOrders = eManager.getAllOrders();
+        String message = "";
+        for (Orders order : allOrders)
+        {
+            message += String.format("Order ID: %d, User ID: %d, Destination: %s\n", order.getOrderID(), order.getUserID().getUserID(),
+                    order.getDestination());
+            Collection<OrderDetails> details = order.getOrderDetailsCollection();
+            Iterator iter = details.iterator();
+            while (iter.hasNext())
+            {
+                OrderDetails detail = (OrderDetails) iter.next();
+                message += detail.toString();
+                message += "\n";
+            }
+            message += "\n\n";
+            adminTextArea.setText("");
+            adminTextArea.setText(message);
+            
+        }
+        
     }//GEN-LAST:event_viewOrdersButtonActionPerformed
 
     private void viewMessagesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMessagesButtonActionPerformed

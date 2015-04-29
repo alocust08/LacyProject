@@ -26,6 +26,12 @@ public class LacysEntityManager {
         em = emf.createEntityManager();
     }
     
+    
+    public List<Orders> getAllOrders()
+    {
+        return (List<Orders>) em.createNamedQuery("Orders.findAll").getResultList();
+    }
+    
     public List<Products> getAllProducts()
     {
         return (List<Products>) em.createNamedQuery("Products.findAll").getResultList();

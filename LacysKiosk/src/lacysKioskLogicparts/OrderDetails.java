@@ -123,6 +123,7 @@ public class OrderDetails implements Serializable {
 
     @Override
     public String toString() {
-        return "lacysKioskLogicparts.OrderDetails[ orderDetailsPK=" + orderDetailsPK + " ]";
+        //return "lacysKioskLogicparts.OrderDetails[ orderDetailsPK=" + orderDetailsPK + " ]";
+        return String.format("Product ID: %d, Unit Price: $%.2f, Quantity: %d", productID.getProductID(), unitPrice, quantity);
     }
 }
