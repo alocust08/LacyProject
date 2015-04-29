@@ -5,12 +5,16 @@
  */
 package lacysKioskGUIparts;
 
+import lacysKioskLogicparts.Products;
+
 /**
  *
  * @author Alisha
  */
 public class AdminProductPanel extends javax.swing.JPanel {
 
+    Products product;
+    
     /**
      * Creates new form AdminProductPanel
      */
@@ -18,6 +22,23 @@ public class AdminProductPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    public AdminProductPanel(Products prod) //Constructor with Inventory object passed in
+    {
+        initComponents();
+        product = prod;
+        setAdminProductPanel(prod);
+    }
+    
+    public void setAdminProductPanel(Products product)
+    {
+        adminProductName.setText("Item Name: " + product.getProductName());
+        adminProductPrice.setText(String.format("Item Price: %,.2f", product.getUnitPrice()));
+        adminProductQuantity.setText(String.format("Item Quantity: %d", product.getUnitsInStock()));
+        adminProductDetailsArea.setText(String.format("Details: %s", product.getDescription()));
+        adminProductRating.setText(String.format("Rating: %.2f%%", product.getRate()));
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,6 +66,7 @@ public class AdminProductPanel extends javax.swing.JPanel {
 
         adminProductDetailsArea.setEditable(false);
         adminProductDetailsArea.setColumns(20);
+        adminProductDetailsArea.setLineWrap(true);
         adminProductDetailsArea.setRows(5);
         adminProductDetailsArea.setText("Details: ");
         jScrollPane1.setViewportView(adminProductDetailsArea);
@@ -53,8 +75,18 @@ public class AdminProductPanel extends javax.swing.JPanel {
         adminProductImage.setText("Image goes here");
 
         adminUpdateButton.setText("Update");
+        adminUpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminUpdateButtonActionPerformed(evt);
+            }
+        });
 
         adminCheckReviewsButton.setText("Check Reviews");
+        adminCheckReviewsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminCheckReviewsButtonActionPerformed(evt);
+            }
+        });
 
         adminProductRating.setText("Rating: ");
 
@@ -69,25 +101,24 @@ public class AdminProductPanel extends javax.swing.JPanel {
                         .addComponent(adminUpdateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(adminCheckReviewsButton))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(adminProductQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(adminProductPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(adminProductName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adminProductQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(adminProductPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(adminProductName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(adminProductImage, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addComponent(adminProductRating)))
+                        .addComponent(adminProductRating, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(adminProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -99,7 +130,7 @@ public class AdminProductPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(adminProductImage, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(adminProductRating)))
+                        .addComponent(adminProductRating, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(adminUpdateButton)
@@ -107,6 +138,18 @@ public class AdminProductPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void adminUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminUpdateButtonActionPerformed
+        ProductUpdatePopUp productPopUp = MainPage.getUpdatePopUp();
+        productPopUp.setUpUpdatePopUp(product);
+        productPopUp.setVisible(true);
+    }//GEN-LAST:event_adminUpdateButtonActionPerformed
+
+    private void adminCheckReviewsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminCheckReviewsButtonActionPerformed
+        CheckReviewsPopUp reviewsPopUp = MainPage.getReviewsPopUp();
+        reviewsPopUp.setUpReviewsPopUp(product);
+        reviewsPopUp.setVisible(true);
+    }//GEN-LAST:event_adminCheckReviewsButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -82,7 +82,27 @@ public class LacysEntityManager {
         return tempUser;     
     }
     
+    public int getLastOrderID()
+    {
+        int num = 0;
+        
+        List<Orders> ordersList = em.createQuery("SELECT o FROM Orders o Order by o.orderID").getResultList();
+        int total = ordersList.size();
+        num = ordersList.get(total - 1).getOrderID();
+        
+        return num;
+    }
     
+    public int getLastProductID()
+    {
+        int num = 0;
+        List<Products> productsList = em.createQuery("SELECT p FROM Products p Order by p.productID").getResultList();
+        int total = productsList.size();
+        num = productsList.get(total - 1).getProductID();
+        return num;
+    }
+    
+        
     public boolean login(String username, String password)
     {
         boolean loggedIn = false;
@@ -134,9 +154,14 @@ public class LacysEntityManager {
     
     public void addOrder(ShoppingCart cart, String address)
     {
+        int newNum = getLastOrderID() + 1;
         em.getTransaction().begin();
-        Orders order = new Orders(111111.0, address, MainPage.getUser());
+        Orders order = new Orders(1430203356.0, address, MainPage.getUser());
+        order.setOrderID(newNum);
         em.persist(order);
+        em.flush();
+        em.refresh(order);
+        
         for (ShoppingCartItem cartItem: cart.getCartItems())
         {
             Products product = cartItem.getProduct();
@@ -148,28 +173,42 @@ public class LacysEntityManager {
             int newInStock = product.getUnitsInStock() - quantity; //update in stock value of product
             product.setUnitsInStock(newInStock);
             em.persist(detail);
+            em.flush();
         }
-        
         em.getTransaction().commit();
     }
     
+    
     public void addProduct(Products product)
     {
+        int newNum = getLastProductID() + 1;
         em.getTransaction().begin();
         Products newProduct = new Products(product.getProductName(), product.getUnitPrice(), product.getUnitsInStock(), 
                                             0, product.getCategory(), product.getDescription(), 0.0);
+        newProduct.setProductID(newNum);
         em.persist(newProduct);
         em.getTransaction().commit();
     }
     
-    public void updateProduct()
+    public void updateProduct(Products changedProduct)
     {
-        
+        Products theProduct = (Products) em.createNamedQuery("Products.findByProductID").setParameter("productID", changedProduct.getProductID()).getSingleResult();
+        em.getTransaction().begin();
+        theProduct.setProductName(changedProduct.getProductName());
+        theProduct.setUnitPrice(changedProduct.getUnitPrice());
+        theProduct.setUnitsInStock(changedProduct.getUnitsInStock());
+        theProduct.setDescription(changedProduct.getDescription());
+        theProduct.setCategory(changedProduct.getCategory());
+        em.persist(theProduct);
+        em.getTransaction().commit();
     }
     
-    public void deleteProduct()
+    public void deleteProduct(Products product)
     {
-        
+        Products theProduct = (Products) em.createNamedQuery("Products.findByProductID").setParameter("productID", product.getProductID()).getSingleResult();
+        em.getTransaction().begin();
+        em.remove(theProduct);
+        em.getTransaction().commit();
     }
     
     
