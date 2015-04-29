@@ -1,22 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.swing.JOptionPane;
 import lacysKioskGUIparts.MainPage;
 
 /**
- *
+ * EntityManager class
+ * In the future this should probably be split up to multiple individual entity managers for each entity class
  * @author Alisha
  */
 public class LacysEntityManager {
@@ -65,7 +60,7 @@ public class LacysEntityManager {
         
     }
     
-    public Users findUser(String name)
+    public Users findUser(String name) //Find by name
     {
         List<Users> tempList;
         Users tempUser;
@@ -82,6 +77,8 @@ public class LacysEntityManager {
         return tempUser;     
     }
     
+    //Having some problem with the autopopulating in the tables, so created these methods to get the last id number
+    //for a few of the entity classes
     public int getLastOrderID()
     {
         int num = 0;

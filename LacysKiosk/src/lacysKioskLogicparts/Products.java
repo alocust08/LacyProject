@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
@@ -10,7 +6,6 @@ import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -21,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Products entity class
  * @author Alisha
  */
 @Entity
@@ -44,7 +39,7 @@ public class Products implements Serializable {
     private Integer productID;
     @Column(name = "productName")
     private String productName;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    //@Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "unitPrice")
     private Double unitPrice;
     @Column(name = "unitsInStock")
@@ -58,13 +53,14 @@ public class Products implements Serializable {
     @Column(name = "rate")
     private Double rate;
     @OneToMany(mappedBy = "productID")
-    private Collection<Messages> messagesCollection;
+    private Collection<Messages> messagesCollection; //List of reviews for the product
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productID")
-    private Collection<OrderDetails> orderDetailsCollection;
+    private Collection<OrderDetails> orderDetailsCollection; //List of order details the product is in
 
     public Products() {
     }
 
+    //This is supposed to be autopopulated in table.
     //public Products(Integer productID) {
     //    this.productID = productID;
     //}

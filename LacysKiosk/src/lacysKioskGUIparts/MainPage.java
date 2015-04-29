@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import java.awt.CardLayout;
@@ -23,7 +19,8 @@ import lacysKioskLogicparts.ShoppingCartItem;
 import lacysKioskLogicparts.Users;
 
 /**
- *
+ * Main GUI
+ * Right now there's some methods and attributes in here that should probably be in a separate class
  * @author Alisha
  */
 public class MainPage extends javax.swing.JFrame {
@@ -54,6 +51,7 @@ public class MainPage extends javax.swing.JFrame {
         desktop.add(checkReviews);
         desktop.add(productUpdate);
        
+        setProductButtons(false);
         //addProductButton.setVisible(false);
         //mainPageButton.setVisible(false);
     }
@@ -920,7 +918,6 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_shippingComboBoxActionPerformed
 
     private void orderCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderCancelButtonActionPerformed
-        // TODO add your handling code here:
         //Cancel the order so clear everything out and return to home page
         
         shippingComboBox.setSelectedIndex(0);
@@ -941,7 +938,6 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_orderCancelButtonActionPerformed
 
     private void placeOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeOrderButtonActionPerformed
-        // TODO add your handling code here:
         //Place the order and add to the database
         if (haveEmptyFields())
         {
@@ -1056,13 +1052,11 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryComboBoxActionPerformed
 
     private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainPageButtonActionPerformed
-        // TODO add your handling code here:
         CardLayout cl = (CardLayout)(middlePanel.getLayout());
         cl.show(middlePanel, "homePanelCard");
     }//GEN-LAST:event_mainPageButtonActionPerformed
 
     private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductButtonActionPerformed
-        // TODO add your handling code here:
         productUpdate.setUpUpdatePopUp();
         productUpdate.setVisible(true);
     }//GEN-LAST:event_addProductButtonActionPerformed
@@ -1121,6 +1115,19 @@ public class MainPage extends javax.swing.JFrame {
         return eManager;
     }
     
+    public static void setProductButtons(boolean isLoggedIn)
+    {
+        if (isLoggedIn && currentUser.getUserPrivilege().equals("Admin"))
+        {
+            addProductButton.setVisible(true);
+            mainPageButton.setVisible(true);
+        }
+        else
+        {
+            addProductButton.setVisible(false);
+            mainPageButton.setVisible(false);
+        }
+    }
     
     public boolean haveEmptyFields()
     {
@@ -1181,7 +1188,7 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addProductButton;
+    private static javax.swing.JButton addProductButton;
     private javax.swing.JPanel cartPanel;
     private javax.swing.JTable cartTable;
     private javax.swing.JLabel categoryBoxLabel;
@@ -1215,7 +1222,7 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel leftSidePanel;
-    private javax.swing.JButton mainPageButton;
+    private static javax.swing.JButton mainPageButton;
     private javax.swing.JPanel middlePanel;
     private javax.swing.JLabel newAccountLabel;
     private javax.swing.JPanel newAccountPanel;

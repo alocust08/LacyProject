@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
@@ -10,11 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Orders entity class
  * @author Alisha
  */
 @Entity
@@ -52,11 +44,12 @@ public class Orders implements Serializable {
     @ManyToOne
     private Users userID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderID")
-    private Collection<OrderDetails> orderDetailsCollection;
+    private Collection<OrderDetails> orderDetailsCollection; //List of order details in an order
 
     public Orders() {
     }
 
+    //This should be autopopulated.
     //public Orders(Integer orderID) {
     //    this.orderID = orderID;
     //}

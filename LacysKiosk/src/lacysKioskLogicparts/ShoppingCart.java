@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.util.ArrayList;
@@ -11,15 +7,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * ShoppingCart class
  * @author Alisha
  */
 public class ShoppingCart {
     
     HashMap < Integer, ShoppingCartItem> cart = null; //Hashmap to hold cart items, product ID is the key
-    double subtotal, total, shipCost;
-    int numItems;
-    double salesTax = 0.06;
+    double subtotal, total, shipCost; //Values for order
+    int numItems; //Number of items in cart
+    double salesTax = 0.06; //The general sales tax value used for testing purposes for this program
     
     public ShoppingCart() 
     {
@@ -96,10 +92,6 @@ public class ShoppingCart {
         calcUpdate();
     }
     
-    public void updateCart()
-    {
-        //Figure this out !!!!!!!!!!
-    }
     
     private double calculateTotal()
     {

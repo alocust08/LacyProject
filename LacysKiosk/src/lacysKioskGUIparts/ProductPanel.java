@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import lacysKioskLogicparts.Products;
 
 /**
- *
+ * Product panel to display product information to customer
  * @author Alisha
  */
 public class ProductPanel extends javax.swing.JPanel {
@@ -164,7 +160,6 @@ public class ProductPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // TODO add your handling code here:
         //Bring up pop up window for add to cart
         AddToCartPopUp addPopUp = MainPage.getCartPopUp(); //Get static add to cart pop up from main page
         addPopUp.setUpAddPopUp(product); //Set up the add pop up window with product information
@@ -172,7 +167,6 @@ public class ProductPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void checkReviewsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkReviewsButtonActionPerformed
-        // TODO add your handling code here:
         //Open pop up window for reviews of product written by customers
         CheckReviewsPopUp reviewsPopUp = MainPage.getReviewsPopUp();
         reviewsPopUp.setUpReviewsPopUp(product);
@@ -181,11 +175,10 @@ public class ProductPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_checkReviewsButtonActionPerformed
 
     private void writeReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeReviewButtonActionPerformed
-        // TODO add your handling code here:
         //Open pop up window to write a review for a product
     }//GEN-LAST:event_writeReviewButtonActionPerformed
 
-    public void setProductPanel(Products product){
+    public void setProductPanel(Products product){ //set up product panel
         itemLabel.setText(product.getProductName());
         priceLabel.setText("$" + String.format("%,.2f", product.getUnitPrice()));
         descriptionArea.setText(product.getDescription());
