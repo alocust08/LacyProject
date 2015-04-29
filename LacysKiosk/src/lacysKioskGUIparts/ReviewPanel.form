@@ -37,7 +37,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="reviewRater" min="-2" max="-2" attributes="0"/>
-                  <Component id="reviewerUsernameLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="reviewerUsernameLabel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -72,6 +72,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="reviewTextArea">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>

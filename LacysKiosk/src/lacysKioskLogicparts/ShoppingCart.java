@@ -52,7 +52,7 @@ public class ShoppingCart {
         for (int i = 0; i < cart.size(); i++) //Cycle through items in cart and see if any match the product name
         {
             item = cart.get(keyList.get(i));
-            if (item.getProduct().getItemName().equals(name))
+            if (item.getProduct().getProductName().equals(name))
             {
                 return item;
             }
@@ -60,7 +60,7 @@ public class ShoppingCart {
         return item; //Return null if can't find item
     }
     
-    public void addItem(int prodId, Inventory product)
+    public void addItem(int prodId, Products product)
     {
         if (!cart.containsKey(prodId)) //If cart does not already contain product id, then add new item to cart
         {
@@ -70,7 +70,7 @@ public class ShoppingCart {
         calcUpdate();
     }
     
-    public void addMultipleItems(int prodId, Inventory product, int num)
+    public void addMultipleItems(int prodId, Products product, int num)
     {
         if (!cart.containsKey(prodId))
         {
@@ -106,8 +106,8 @@ public class ShoppingCart {
         double amount = 0.0;
         for (ShoppingCartItem item : getCartItems()) {
             
-            Inventory cartItem = item.getProduct();
-            amount += (item.getQuantity() * cartItem.getItemPrice()); //accumulator for total amount
+            Products cartItem = item.getProduct();
+            amount += (item.getQuantity() * cartItem.getUnitPrice()); //accumulator for total amount
         }
         return amount;
     }
@@ -140,6 +140,7 @@ public class ShoppingCart {
         numItems = 0;
         subtotal = 0;
         total = 0;
+        shipCost = 0;
     }
     
     //Getters

@@ -11,29 +11,29 @@ package lacysKioskLogicparts;
  */
 public class ShoppingCartItem {
     
-    Inventory product;
+    Products product;
     int quantity;
     
     public ShoppingCartItem(){}     
     
-    public ShoppingCartItem(Inventory product){ //Constructor with Inventory object passed in
+    public ShoppingCartItem(Products product){ //Constructor with Inventory object passed in
         
         this.product = product;
         quantity = 1;
     }
   
-    public ShoppingCartItem(Inventory product, int quantity) //Inventory object and quantity of object passed in
+    public ShoppingCartItem(Products product, int quantity) //Inventory object and quantity of object passed in
     {
         this.product = product;
         this.quantity = quantity;
     }
     
     //Setters and Getters
-    public Inventory getProduct() {
+    public Products getProduct() {
         return product;
     }
 
-    public void setProduct(Inventory product) {
+    public void setProduct(Products product) {
         this.product = product;
     }
 

@@ -5,12 +5,17 @@
  */
 package lacysKioskGUIparts;
 
+import lacysKioskLogicparts.Products;
+
 /**
  *
  * @author Alisha
  */
 public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
-
+   
+    Products product;
+    boolean add = false;
+    
     /**
      * Creates new form ProductUpdatePopUp
      */
@@ -32,14 +37,18 @@ public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        adminDescriptionTxtField = new javax.swing.JTextArea();
+        updateButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
+        updateCancelButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         adminProductTxtField = new javax.swing.JTextField();
         adminPriceTxtField = new javax.swing.JTextField();
         adminQuantityTxtField = new javax.swing.JTextField();
+        categoryComboBox = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        itemIDTxtField = new javax.swing.JTextField();
+        deleteButton = new javax.swing.JButton();
 
         jLabel1.setText("Item Name:");
 
@@ -47,50 +56,90 @@ public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Item Quantity:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        adminDescriptionTxtField.setColumns(20);
+        adminDescriptionTxtField.setRows(5);
+        jScrollPane1.setViewportView(adminDescriptionTxtField);
 
-        jButton1.setText("Update");
+        updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Reset");
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Cancel");
+        updateCancelButton.setText("Cancel");
+        updateCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateCancelButtonActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Details:");
+
+        categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Choose Category:", "Home", "Clothes", "Kitchen" }));
+
+        jLabel5.setText("Item ID");
+
+        itemIDTxtField.setEditable(false);
+        itemIDTxtField.setEnabled(false);
+
+        deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jButton1)
-                .addGap(50, 50, 50)
-                .addComponent(jButton2)
-                .addGap(45, 45, 45)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(adminPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(82, 82, 82)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(adminPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(adminQuantityTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(adminQuantityTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(adminProductTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel4))
-                        .addGap(0, 13, Short.MAX_VALUE)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel5)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(itemIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(131, 131, 131)
+                                            .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(adminProductTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 13, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(updateButton)
+                        .addGap(35, 35, 35)
+                        .addComponent(resetButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(updateCancelButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,42 +147,115 @@ public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(itemIDTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(adminProductTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(adminPriceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(adminQuantityTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                    .addComponent(adminQuantityTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(updateButton)
+                    .addComponent(resetButton)
+                    .addComponent(updateCancelButton)
+                    .addComponent(deleteButton))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        String name = adminProductTxtField.getText().trim();
+        Double price = Double.parseDouble(adminPriceTxtField.getText().trim());
+        Integer amount = Integer.parseInt(adminQuantityTxtField.getText().trim());
+        String desc = adminDescriptionTxtField.getText().trim();
+        String category = (String) categoryComboBox.getSelectedItem();
+        
+        Products updatedProduct = new Products(name, price, amount, 0, category, desc, 0.0);
+        
+        if (add)
+            MainPage.getEManager().addProduct(updatedProduct);
+        else
+        {
+            updatedProduct.setProductID(product.getProductID());
+            MainPage.getEManager().updateProduct(updatedProduct);
+        }
+        setVisible(false);
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        // TODO add your handling code here:
+        setUpUpdatePopUp(product);
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        MainPage.getEManager().deleteProduct(product);
+        setVisible(false);
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void updateCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCancelButtonActionPerformed
+        // TODO add your handling code here
+        setVisible(false);
+    }//GEN-LAST:event_updateCancelButtonActionPerformed
+
+    public void setUpUpdatePopUp(Products product)
+    {
+        add = false;
+        this.product = product;
+        itemIDTxtField.setText(product.getProductID().toString());
+        adminProductTxtField.setText(product.getProductName());
+        adminPriceTxtField.setText(product.getUnitPrice().toString());
+        adminQuantityTxtField.setText(product.getUnitsInStock().toString());
+        adminDescriptionTxtField.setText(product.getDescription());
+        categoryComboBox.setSelectedItem(product.getCategory());
+        deleteButton.setEnabled(true);
+        updateButton.setText("Update");
+    }
+    
+    public void setUpUpdatePopUp()
+    {
+        add = true;
+        this.product = null;
+        itemIDTxtField.setText("");
+        adminProductTxtField.setText("");
+        adminPriceTxtField.setText("");
+        adminQuantityTxtField.setText("");
+        adminDescriptionTxtField.setText("");
+        categoryComboBox.setSelectedIndex(0);
+        deleteButton.setEnabled(false);
+        updateButton.setText("Add");
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea adminDescriptionTxtField;
     private javax.swing.JTextField adminPriceTxtField;
     private javax.swing.JTextField adminProductTxtField;
     private javax.swing.JTextField adminQuantityTxtField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox categoryComboBox;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JTextField itemIDTxtField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton resetButton;
+    private javax.swing.JButton updateButton;
+    private javax.swing.JButton updateCancelButton;
     // End of variables declaration//GEN-END:variables
 }

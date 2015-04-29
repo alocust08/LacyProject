@@ -6,11 +6,13 @@
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,74 +29,63 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Messages.findAll", query = "SELECT m FROM Messages m"),
     @NamedQuery(name = "Messages.findByMessageID", query = "SELECT m FROM Messages m WHERE m.messageID = :messageID"),
     @NamedQuery(name = "Messages.findByMessageType", query = "SELECT m FROM Messages m WHERE m.messageType = :messageType"),
-    @NamedQuery(name = "Messages.findByUserID", query = "SELECT m FROM Messages m WHERE m.userID = :userID"),
     @NamedQuery(name = "Messages.findByTarget", query = "SELECT m FROM Messages m WHERE m.target = :target"),
     @NamedQuery(name = "Messages.findByContents", query = "SELECT m FROM Messages m WHERE m.contents = :contents")})
 public class Messages implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @Column(name = "MessageID")
-    private int messageID;
-    @Basic(optional = false)
-    @Column(name = "MessageType")
-    private int messageType;
-    @Basic(optional = false)
-    @Column(name = "UserID")
-    private int userID;
-    @Column(name = "Target")
-    private Integer target;
-    @Basic(optional = false)
-    @Column(name = "Contents")
+    @Column(name = "messageID")
+    private Integer messageID;
+    @Column(name = "messageType")
+    private String messageType;
+    @Column(name = "target")
+    private String target;
+    @Column(name = "contents")
     private String contents;
+    @JoinColumn(name = "productID", referencedColumnName = "productID")
+    @ManyToOne
+    private Products productID;
+    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    @ManyToOne
+    private Users userID;
 
     public Messages() {
     }
 
-    public Messages(int messageID, int messageType, int userID, String contents) {
-        this.messageID = messageID;
-        this.messageType = messageType;
-        this.userID = userID;
-        this.contents = contents;
-    }
+    //public Messages(Integer messageID) {
+    //    this.messageID = messageID;
+    //}
     
-    public Messages(int messageID, int messageType, int userID, Integer target, String contents) {
-        this.messageID = messageID;
+    public Messages(String messageType, String target, String contents, Products productID, Users userID)
+    {
         this.messageType = messageType;
-        this.userID = userID;
         this.target = target;
         this.contents = contents;
+        this.productID = productID;
+        this.userID = userID;
     }
 
-    public int getMessageID() {
+    public Integer getMessageID() {
         return messageID;
     }
 
-    public void setMessageID(int messageID) {
+    public void setMessageID(Integer messageID) {
         this.messageID = messageID;
     }
 
-    public int getMessageType() {
+    public String getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(int messageType) {
+    public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    public Integer getTarget() {
+    public String getTarget() {
         return target;
     }
 
-    public void setTarget(Integer target) {
+    public void setTarget(String target) {
         this.target = target;
     }
 
@@ -106,10 +97,26 @@ public class Messages implements Serializable {
         this.contents = contents;
     }
 
+    public Products getProductID() {
+        return productID;
+    }
+
+    public void setProductID(Products productID) {
+        this.productID = productID;
+    }
+
+    public Users getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Users userID) {
+        this.userID = userID;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.messageID;
+        hash = 37 * hash + Objects.hashCode(this.messageID);
         return hash;
     }
 
@@ -122,16 +129,15 @@ public class Messages implements Serializable {
             return false;
         }
         final Messages other = (Messages) obj;
-        if (this.messageID != other.messageID) {
+        if (!Objects.equals(this.messageID, other.messageID)) {
             return false;
         }
         return true;
     }
 
-    
     @Override
     public String toString() {
-        return "lacysKioskLogicparts.Messages[ messagesID=" + messageID + " ]";
+        return "lacysKioskLogicparts.Messages[ messageID=" + messageID + " ]";
     }
     
 }

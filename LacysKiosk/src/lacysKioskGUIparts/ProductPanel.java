@@ -5,8 +5,7 @@
  */
 package lacysKioskGUIparts;
 
-import lacysKioskLogicparts.Inventory;
-import lacysKioskLogicparts.Messages;
+import lacysKioskLogicparts.Products;
 
 /**
  *
@@ -14,8 +13,8 @@ import lacysKioskLogicparts.Messages;
  */
 public class ProductPanel extends javax.swing.JPanel {
 
-    Inventory product; //Hold product for each panel
-    Messages review;
+    Products product; //Hold product for each panel
+    //Messages review;
     
     /**
      * Creates new form ProductPanel
@@ -24,7 +23,7 @@ public class ProductPanel extends javax.swing.JPanel {
         initComponents();
     }
     
-    public ProductPanel(Inventory prod) //Constructor with Inventory object passed in
+    public ProductPanel(Products prod) //Constructor with Inventory object passed in
     {
         initComponents();
         product = prod;
@@ -186,12 +185,12 @@ public class ProductPanel extends javax.swing.JPanel {
         //Open pop up window to write a review for a product
     }//GEN-LAST:event_writeReviewButtonActionPerformed
 
-    public void setProductPanel(Inventory product){
-        itemLabel.setText(product.getItemName());
-        priceLabel.setText("$" + String.format("%,.2f", product.getItemPrice()));
-        descriptionArea.setText(product.getItemDescription());
-        starRater1.setRating((float) convertToStarRating(product.getItemRating()));
-        ratingNumText.setText(String.format("%.1f%%", product.getItemRating()));
+    public void setProductPanel(Products product){
+        itemLabel.setText(product.getProductName());
+        priceLabel.setText("$" + String.format("%,.2f", product.getUnitPrice()));
+        descriptionArea.setText(product.getDescription());
+        starRater1.setRating((float) convertToStarRating(product.getRate()));
+        ratingNumText.setText(String.format("%.1f%%", product.getRate()));
     }
     
     private double convertToStarRating(double rating)

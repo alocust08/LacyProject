@@ -5,13 +5,13 @@
  */
 package lacysKioskGUIparts;
 
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import lacysKioskLogicparts.Inventory;
 import lacysKioskLogicparts.Messages;
+import lacysKioskLogicparts.Products;
 
 /**
  *
@@ -19,6 +19,7 @@ import lacysKioskLogicparts.Messages;
  */
 public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
 
+    Products product;
     /**
      * Creates new form CheckReviewsPopUp
      */
@@ -107,14 +108,15 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void reviewCloseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewCloseBtnActionPerformed
-        // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_reviewCloseBtnActionPerformed
 
     
-    public void setUpReviewsPopUp(Inventory product)
+    public void setUpReviewsPopUp(Products product)
     {
-        productNameLabel.setText(product.getItemName());
+        this.product = product;
+        
+        productNameLabel.setText(product.getProductName());
         
         reviewsPanel.removeAll(); //clear everything from panel from possible previous browse
         JPanel viewPanel = new JPanel();
@@ -123,13 +125,14 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
         JScrollPane scrollpanel = new JScrollPane(); //Scrollpanel so can see all reviews shown
         scrollpanel.setSize(reviewsPanel.getWidth(), reviewsPanel.getHeight());
         
-        List<Messages> allReviews = MainPage.getEManager().getReviewsByProduct(product.getItemID());
-        ListIterator iter = allReviews.listIterator();
+        //List<Messages> allReviews = MainPage.getEManager().getReviewsByProduct(product.getItemID());
+        Collection<Messages> allReviews = product.getMessagesCollection();
+        Iterator iter = allReviews.iterator();
         while (iter.hasNext())
         {
             Messages review = (Messages) iter.next();
             ReviewPanel revPanel = new ReviewPanel();
-            revPanel.setUpReviewPanel(review, product.getItemRating());
+            revPanel.setUpReviewPanel(review, product.getRate());
             viewPanel.add(revPanel);    
         }
         
