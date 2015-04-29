@@ -5,25 +5,17 @@
  */
 package lacysKioskGUIparts;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.BoxLayout;
-import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import lacysKioskLogicparts.Account;
-import lacysKioskLogicparts.Inventory;
 import lacysKioskLogicparts.LacysEntityManager;
 import lacysKioskLogicparts.Products;
 import lacysKioskLogicparts.ShoppingCart;
@@ -38,8 +30,7 @@ public class MainPage extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.sqlite.JDBC";
     public static final String DATABASE_URL = "jdbc:sqlite:C:\\Data\\Lacys"; 
-    private static Account user = new Account(); //Testing user until switch to entity class version
-    private static Users currentUser = new Users(); //Holds the current user in the system
+    private static Users currentUser = null; //Holds the current user in the system
     private static ShoppingCart cart = new ShoppingCart();  //Holds shopping cart for user
     private static DefaultTableModel cartModel; //This is the model to go with the cart table
     private static AddToCartPopUp addCart; //This popup window confirms adding an item to cart
@@ -47,8 +38,7 @@ public class MainPage extends javax.swing.JFrame {
     private static ProductUpdatePopUp productUpdate; //This pop up windows allows admins to update product information
     private static LacysEntityManager eManager; //Class to handle inventory requests
     
-    private Connection connection; //Temporary while using regular database stuff
-    private Statement statement; //Temporary while using regular database stuff
+   
     /**
      * Creates new form MainPage
      */
@@ -63,33 +53,7 @@ public class MainPage extends javax.swing.JFrame {
         desktop.add(addCart);
         desktop.add(checkReviews);
         desktop.add(productUpdate);
-        try
-		{
-			// load database driver class
-			Class.forName(JDBC_DRIVER);
-			// connect to database
-			connection = DriverManager.getConnection(DATABASE_URL);
-
-			// create statement to query database
-			statement = connection.createStatement();
-			// query the database and get the result set
-			
-			// now setup a display
-		}
-
-		catch (SQLException sqle)
-		{
-			JOptionPane.showMessageDialog(null, sqle.getMessage(),"Database Error", JOptionPane.ERROR_MESSAGE);
-			sqle.printStackTrace();
-			System.exit(1);
-		}
-
-		catch (ClassNotFoundException cnfe)
-		{
-			JOptionPane.showMessageDialog(null,cnfe.getMessage(),"Driver not Found", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
-
+       
     }
 
     /**
@@ -110,6 +74,8 @@ public class MainPage extends javax.swing.JFrame {
         shoppingLabel = new javax.swing.JLabel();
         categoryComboBox = new javax.swing.JComboBox();
         categoryBoxLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         middlePanel = new javax.swing.JPanel();
         homePagePanel = new javax.swing.JPanel();
         storeNameLabel = new javax.swing.JLabel();
@@ -177,7 +143,7 @@ public class MainPage extends javax.swing.JFrame {
         pagesBoxLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         pagesBoxLabel.setText("Go To:");
 
-        pagesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Main", "Create Account", "My Cart", "My Account" }));
+        pagesComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Main", "Create Account", "My Cart" }));
         pagesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pagesComboBoxActionPerformed(evt);
@@ -228,21 +194,31 @@ public class MainPage extends javax.swing.JFrame {
         categoryBoxLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         categoryBoxLabel.setText("Browse Category:");
 
+        jButton1.setText("Add Product");
+
+        jButton2.setText("Main Page");
+
         javax.swing.GroupLayout rightSidePanelLayout = new javax.swing.GroupLayout(rightSidePanel);
         rightSidePanel.setLayout(rightSidePanelLayout);
         rightSidePanelLayout.setHorizontalGroup(
             rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rightSidePanelLayout.createSequentialGroup()
                 .addGroup(rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(rightSidePanelLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(rightSidePanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(shoppingLabel))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightSidePanelLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(categoryBoxLabel)))
+                        .addComponent(categoryBoxLabel))
+                    .addGroup(rightSidePanelLayout.createSequentialGroup()
+                        .addGroup(rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(shoppingLabel))
+                            .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton1)
+                                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(3, 3, 3)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         rightSidePanelLayout.setVerticalGroup(
@@ -254,6 +230,10 @@ public class MainPage extends javax.swing.JFrame {
                 .addComponent(categoryBoxLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -794,13 +774,50 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_checkOutButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        // TODO add your handling code here:
         //Go through actions to create new user and add to database
+        boolean created = false;
+        if (newUsernameText.getText().trim().isEmpty() || newPasswordText.getPassword().length == 0 || newPasswordText2.getPassword().length == 0)
+        {
+            JOptionPane.showMessageDialog(null, "All fields must be entered", "No blank fields", JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            String username = newUsernameText.getText();
+            String password = String.valueOf(newPasswordText.getPassword());
+            String password2 = String.valueOf(newPasswordText2.getPassword());
+            
+            Users tempUser = eManager.findUser(username);
+            if (tempUser == null) //Don't want to find a user with that name since would mean is already taken
+            {
+                if (password.equals(password2))
+                {
+                    eManager.addCustomer(username, password);
+                    JOptionPane.showMessageDialog(null, "User account has been created.", "Account created.", JOptionPane.OK_OPTION);
+                    created = true;
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Password fields don't match.", "Mismatched passwords", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "That username already exists in the database.", "Username taken", JOptionPane.ERROR_MESSAGE);
+            }
+        }
        
+        newUsernameText.setText("");
+        newPasswordText.setText("");
+        newPasswordText2.setText("");
+        
+        if (created)
+        {
+            CardLayout cl = (CardLayout)(middlePanel.getLayout());
+            cl.show(middlePanel, "homePanelCard");
+        }
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        // TODO add your handling code here:
         //Checks if any checkboxes are checked or unchecked and then deletes the ones
         //that are checked from cart
         ArrayList<Integer> rowNums = new ArrayList<Integer>(); //holds row numbers that need to be deleted
@@ -827,9 +844,7 @@ public class MainPage extends javax.swing.JFrame {
                     cart.updateItem(product.getProductID(), (int) cartModel.getValueAt(row, 1));
                     cartModel.setValueAt((int) cartModel.getValueAt(row, 1) * (double) cartModel.getValueAt(row, 2) , row, 3);
                 }
-                
             }
-        
         }
         
         //Go backwards so if deleting multiple rows from table, it won't affect later row numbers
@@ -883,8 +898,20 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_placeOrderButtonActionPerformed
 
     private void feedbackSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_feedbackSubmitButtonActionPerformed
-        // TODO add your handling code here:
         //Submit feedback from user
+        if (currentUser == null)
+        {
+            JOptionPane.showMessageDialog(null, "You must be logged in to submit feedback.", "Feedback Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (feedbackText.getText().trim().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, "You must enter a message to submit.", "Feedback Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            String text = feedbackText.getText();
+            eManager.addFeedback(text);
+        }
     }//GEN-LAST:event_feedbackSubmitButtonActionPerformed
 
     private void categoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryComboBoxActionPerformed
@@ -964,9 +991,14 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryComboBoxActionPerformed
 
     
-    public static void setUser(Account aUser)
+    public static void setUser(Users aUser)
     {
-        user = aUser;
+        currentUser = aUser;
+    }
+    
+    public static Users getUser()
+    {
+        return currentUser;
     }
     
     public static void clearCart()
@@ -1059,6 +1091,8 @@ public class MainPage extends javax.swing.JFrame {
     private lacysKioskGUIparts.HeaderPanel headerPanel2;
     private javax.swing.JPanel homePagePanel;
     private javax.swing.JTextArea itemsTextArea;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

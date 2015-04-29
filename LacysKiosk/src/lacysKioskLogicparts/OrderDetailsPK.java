@@ -6,6 +6,7 @@
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Embeddable;
 
 /**
@@ -15,32 +16,64 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class OrderDetailsPK implements Serializable {
 
+    private int orderID;
+    private int productID;
+    
+    
     
     public OrderDetailsPK() {
     }
 
-    //public OrderDetailsPK() {
-    //}
+    public OrderDetailsPK(int orderId, int productId) {
+        this.orderID = orderId;
+        this.productID = productId;
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public void setProductID(int productID) {
+        this.productID = productID;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 0;
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.orderID);
+        hash = 23 * hash + Objects.hashCode(this.productID);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrderDetailsPK)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        OrderDetailsPK other = (OrderDetailsPK) object;
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OrderDetailsPK other = (OrderDetailsPK) obj;
+        if (!Objects.equals(this.orderID, other.orderID)) {
+            return false;
+        }
+        if (!Objects.equals(this.productID, other.productID)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return ("something");
+        return "OrderDetailsPK{" + "orderID=" + orderID + ", productID=" + productID + '}';
     }
     
 }

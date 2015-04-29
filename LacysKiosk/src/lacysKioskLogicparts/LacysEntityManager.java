@@ -12,6 +12,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.swing.JOptionPane;
+import lacysKioskGUIparts.MainPage;
 
 /**
  *
@@ -56,11 +58,6 @@ public class LacysEntityManager {
         return product;
     }
     
-    /*public List<Messages> getReviewsByProduct(int prodId)
-    {
-        return (List<Messages>) em.createNamedQuery("Messages.findByTarget").setParameter("target", prodId).getResultList(); 
-    }*/
-    
     public Users findUserByID(int userID)
     {
         Users aUser = (Users) em.createNamedQuery("Users.findByUserID").setParameter("userID", userID).getSingleResult();
@@ -70,48 +67,110 @@ public class LacysEntityManager {
     
     public Users findUser(String name)
     {
+        List<Users> tempList;
         Users tempUser;
-        try 
-        {
-            tempUser = (Users) em.createNamedQuery("Users.findByUserName").setParameter("userName", name).getSingleResult();
-        }
-        catch (NoResultException nrex)
-        {
-            tempUser = null;
-        }
-        catch(NonUniqueResultException nurex)
+        
+        tempList = (List<Users>) em.createNamedQuery("Users.findByUserName").setParameter("userName", name).getResultList();
+        
+        if (tempList.isEmpty() || tempList == null)
         {
             tempUser = null;
         }
-        catch(Exception ex)
-        {
-            tempUser = null;
-        }
+        else 
+            tempUser = tempList.get(0);
         
         return tempUser;     
     }
     
-    public String findPassword(String id)
-    {
-        String tempPswd;
-        try
-        {
-            String query = "SELECT u.UserName FROM Users u WHERE u.userID = :userID";
-            tempPswd = (String) em.createQuery(query).setParameter("userID", id).getSingleResult();
-        }
-        catch (NoResultException nrex)
-        {
-            tempPswd = null;
-        }
-        catch(NonUniqueResultException nurex)
-        {
-            tempPswd = null;
-        }
-        catch(Exception ex)
-        {
-            tempPswd = null;
-        }
-       return tempPswd; 
     
+    public boolean login(String username, String password)
+    {
+        boolean loggedIn = false;
+        
+        Users tempUser = findUser(username);
+        
+        if (tempUser != null)
+        {
+            if(tempUser.getUserPassword().equals(password))
+            {
+                loggedIn = true;
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Password did not match.", "Log In Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "No such user found in system.", "Log In Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return loggedIn;
     }
+    
+    public void addFeedback(String text)
+    {
+        em.getTransaction().begin();
+        Messages message = new Messages("Message", "Store", text, null, MainPage.getUser());
+        em.persist(message);
+        em.getTransaction().commit(); 
+    }
+    
+    public void addReview(String text, Products product)
+    {
+        em.getTransaction().begin();
+        Messages message = new Messages("Feedback", "Product", text, product, MainPage.getUser());
+        em.persist(message);
+        em.getTransaction().commit();
+    }
+    
+    public void addCustomer(String name, String password)
+    {
+        em.getTransaction().begin();
+        Users user = new Users(name, password, 0.00, "Customer");
+        em.persist(user);
+        em.getTransaction().commit();
+    }
+    
+    public void addOrder(ShoppingCart cart, String address)
+    {
+        em.getTransaction().begin();
+        Orders order = new Orders(111111.0, address, MainPage.getUser());
+        em.persist(order);
+        for (ShoppingCartItem cartItem: cart.getCartItems())
+        {
+            Products product = cartItem.getProduct();
+            int quantity = cartItem.getQuantity();
+            //Add each shopping cart item to the order details table
+            OrderDetailsPK detailPK = new OrderDetailsPK(order.getOrderID(), product.getProductID());
+            OrderDetails detail = new OrderDetails(detailPK, product.getUnitPrice(), quantity, product, order);
+            
+            int newInStock = product.getUnitsInStock() - quantity; //update in stock value of product
+            product.setUnitsInStock(newInStock);
+            em.persist(detail);
+        }
+        
+        em.getTransaction().commit();
+    }
+    
+    public void addProduct(Products product)
+    {
+        em.getTransaction().begin();
+        Products newProduct = new Products(product.getProductName(), product.getUnitPrice(), product.getUnitsInStock(), 
+                                            0, product.getCategory(), product.getDescription(), 0.0);
+        em.persist(newProduct);
+        em.getTransaction().commit();
+    }
+    
+    public void updateProduct()
+    {
+        
+    }
+    
+    public void deleteProduct()
+    {
+        
+    }
+    
+    
 }

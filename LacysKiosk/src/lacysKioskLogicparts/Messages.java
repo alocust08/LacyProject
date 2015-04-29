@@ -52,13 +52,12 @@ public class Messages implements Serializable {
     public Messages() {
     }
 
-    public Messages(Integer messageID) {
-        this.messageID = messageID;
-    }
+    //public Messages(Integer messageID) {
+    //    this.messageID = messageID;
+    //}
     
-    public Messages(Integer messageID, String messageType, String target, String contents, Products productID, Users userID)
+    public Messages(String messageType, String target, String contents, Products productID, Users userID)
     {
-        this.messageID = messageID;
         this.messageType = messageType;
         this.target = target;
         this.contents = contents;

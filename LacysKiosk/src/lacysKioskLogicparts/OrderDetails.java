@@ -11,10 +11,12 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,41 +33,46 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderDetails.findByQuantity", query = "SELECT o FROM OrderDetails o WHERE o.quantity = :quantity")})
 public class OrderDetails implements Serializable {
     private static final long serialVersionUID = 1L;
-    //@EmbeddedId
-    // OrderDetailsPK orderDetailsPK;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @EmbeddedId
+    OrderDetailsPK orderDetailsPK;
+    //@Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "unitPrice")
     private Double unitPrice;
     @Column(name = "quantity")
     private Integer quantity;
-    @Id
-    @JoinColumn(name = "productID", referencedColumnName = "productID")
+    //@Id
+    @JoinColumn(name = "productID", referencedColumnName = "productID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Products productID;
-    @Id
-    @JoinColumn(name = "orderID", referencedColumnName = "orderID")
+    //@Id
+    @JoinColumn(name = "orderID", referencedColumnName = "orderID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Orders orderID;
 
     public OrderDetails() {
     }
-    
-    public OrderDetails(Orders orderID, Products productID) {
-        this.orderID = orderID;
-        this.productID = productID;
-    }
 
-   /* public OrderDetails(OrderDetailsPK orderDetailsPK) {
+    public OrderDetails(OrderDetailsPK orderDetailsPK) {
         this.orderDetailsPK = orderDetailsPK;
     }
-
+    
+    public OrderDetails(OrderDetailsPK orderDetailsPK, Double unitPrice, Integer quantity, Products productID, Orders orderID)
+    {
+        this.orderDetailsPK = orderDetailsPK;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.productID = productID;
+        this.orderID = orderID;
+    }
+    
+    
     public OrderDetailsPK getOrderDetailsPK() {
         return orderDetailsPK;
     }
 
     public void setOrderDetailsPK(OrderDetailsPK orderDetailsPK) {
         this.orderDetailsPK = orderDetailsPK;
-    }*/
+    }
 
     public Double getUnitPrice() {
         return unitPrice;
@@ -100,7 +107,7 @@ public class OrderDetails implements Serializable {
     }
 
     
-    /*@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (orderDetailsPK != null ? orderDetailsPK.hashCode() : 0);
@@ -123,9 +130,9 @@ public class OrderDetails implements Serializable {
     @Override
     public String toString() {
         return "lacysKioskLogicparts.OrderDetails[ orderDetailsPK=" + orderDetailsPK + " ]";
-    }*/
+    }
 
-    @Override
+    /*@Override
     public int hashCode() {
         int hash = 5;
         hash = 47 * hash + Objects.hashCode(this.orderID);
@@ -151,6 +158,6 @@ public class OrderDetails implements Serializable {
     public String toString() {
         return "OrderDetails{" + "orderID=" + orderID + '}';
     }
-    
+    */
     
 }

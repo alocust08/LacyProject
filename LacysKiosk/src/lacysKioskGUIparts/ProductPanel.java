@@ -5,8 +5,6 @@
  */
 package lacysKioskGUIparts;
 
-import lacysKioskLogicparts.Inventory;
-import lacysKioskLogicparts.Messages;
 import lacysKioskLogicparts.Products;
 
 /**

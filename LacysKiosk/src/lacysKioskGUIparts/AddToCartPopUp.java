@@ -6,7 +6,6 @@
 package lacysKioskGUIparts;
 
 import javax.swing.JOptionPane;
-import lacysKioskLogicparts.Inventory;
 import lacysKioskLogicparts.Products;
 import lacysKioskLogicparts.ShoppingCart;
 import lacysKioskLogicparts.ShoppingCartItem;

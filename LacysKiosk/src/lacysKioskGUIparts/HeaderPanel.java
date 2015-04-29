@@ -6,8 +6,7 @@
 package lacysKioskGUIparts;
 
 import java.awt.CardLayout;
-import javax.swing.JOptionPane;
-import lacysKioskLogicparts.Account;
+import lacysKioskLogicparts.Users;
 
 /**
  *
@@ -176,14 +175,15 @@ public class HeaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
-        Account tempUser = new Account();
+        //Account tempUser = new Account();
+        //Users tempUser = new Users();
         String name = userNameText.getText();
         String pswd = String.valueOf(passwordText.getPassword());
-        if (tempUser.logIn(name, pswd))
+        
+        if (MainPage.getEManager().login(name, pswd))
         {
-            tempUser.setUsername(name);
-            tempUser.setPassword(pswd);
-            MainPage.setUser(tempUser); //Set user value on main page
+            Users user = MainPage.getEManager().findUser(name);
+            MainPage.setUser(user); //Set user value on main page
             CardLayout cl = (CardLayout)(this.getLayout());
             cl.show(this, "LoggedInCard"); //flipped to logged in header card
             userLabel.setText(name); //set user's name in welcome message
@@ -201,10 +201,11 @@ public class HeaderPanel extends javax.swing.JPanel {
         
         CardLayout cl = (CardLayout) (this.getLayout());
         cl.show(this, "NotLoggedInCard"); //Go back to logged out header card
+        loggedIn = false; 
+        MainPage.setUser(null);
         MainPage.clearCart(); //clear cart
         setNumInCartLabel(0); //set the cart number label back to zero
-        loggedIn = false; 
-        //something here to change main user???
+        //something here to change main user back to guest???
     }//GEN-LAST:event_logOutButtonActionPerformed
 
     public static void setNumInCartLabel(int num) //This needs to be accessed by other classes

@@ -7,12 +7,9 @@ package lacysKioskGUIparts;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import lacysKioskLogicparts.Inventory;
 import lacysKioskLogicparts.Messages;
 import lacysKioskLogicparts.Products;
 

@@ -55,13 +55,12 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public Users(Integer userID) {
-        this.userID = userID;
-    }
+    //public Users(Integer userID) {
+    //    this.userID = userID;
+    //}
     
-    public Users(Integer userID, String userName, String userPassword, Double userBalance, String userPrivilege)
+    public Users(String userName, String userPassword, Double userBalance, String userPrivilege)
     {
-        this.userID = userID;
         this.userName = userName;
         this.userPassword = userPassword;
         this.userBalance = userBalance;
