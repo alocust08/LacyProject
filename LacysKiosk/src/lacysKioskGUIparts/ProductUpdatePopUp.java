@@ -1,20 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import lacysKioskLogicparts.Products;
 
 /**
- *
+ * Internal frame pop up window to update product info
  * @author Alisha
  */
 public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
    
     Products product;
-    boolean add = false;
+    boolean add = false; //if adding new product, this will become true
     
     /**
      * Creates new form ProductUpdatePopUp
@@ -196,22 +192,19 @@ public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        // TODO add your handling code here:
         setUpUpdatePopUp(product);
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        // TODO add your handling code here:
         MainPage.getEManager().deleteProduct(product);
         setVisible(false);
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void updateCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCancelButtonActionPerformed
-        // TODO add your handling code here
         setVisible(false);
     }//GEN-LAST:event_updateCancelButtonActionPerformed
 
-    public void setUpUpdatePopUp(Products product)
+    public void setUpUpdatePopUp(Products product) //Set up pop up when updating or deleting a current product
     {
         add = false;
         this.product = product;
@@ -225,8 +218,8 @@ public class ProductUpdatePopUp extends javax.swing.JInternalFrame {
         updateButton.setText("Update");
     }
     
-    public void setUpUpdatePopUp()
-    {
+    public void setUpUpdatePopUp() //Set up pop up when adding completely new product
+    { 
         add = true;
         this.product = null;
         itemIDTxtField.setText("");

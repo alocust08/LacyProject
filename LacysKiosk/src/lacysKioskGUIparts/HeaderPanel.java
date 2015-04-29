@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import java.awt.CardLayout;
 import lacysKioskLogicparts.Users;
 
 /**
- *
+ * Header panel for logging in, 2 cards it switches between whether logged in or logged out
  * @author Alisha
  */
 public class HeaderPanel extends javax.swing.JPanel {
@@ -175,8 +171,7 @@ public class HeaderPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
-        //Account tempUser = new Account();
-        //Users tempUser = new Users();
+
         String name = userNameText.getText();
         String pswd = String.valueOf(passwordText.getPassword());
         
@@ -188,6 +183,7 @@ public class HeaderPanel extends javax.swing.JPanel {
             cl.show(this, "LoggedInCard"); //flipped to logged in header card
             userLabel.setText(name); //set user's name in welcome message
             loggedIn = true;
+            MainPage.setProductButtons(loggedIn);
             //Set something here to check if there are items in cart and ask user if would like to keep items
             //or if would like to clear cart. In case they had been browsing as a guest and now want to sign in
             //and keep what they might have already added.
@@ -202,10 +198,10 @@ public class HeaderPanel extends javax.swing.JPanel {
         CardLayout cl = (CardLayout) (this.getLayout());
         cl.show(this, "NotLoggedInCard"); //Go back to logged out header card
         loggedIn = false; 
+        MainPage.setProductButtons(loggedIn);
         MainPage.setUser(null);
         MainPage.clearCart(); //clear cart
         setNumInCartLabel(0); //set the cart number label back to zero
-        //something here to change main user back to guest???
     }//GEN-LAST:event_logOutButtonActionPerformed
 
     public static void setNumInCartLabel(int num) //This needs to be accessed by other classes

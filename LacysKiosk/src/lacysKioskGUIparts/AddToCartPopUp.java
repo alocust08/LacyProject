@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import javax.swing.JOptionPane;
@@ -11,7 +7,7 @@ import lacysKioskLogicparts.ShoppingCart;
 import lacysKioskLogicparts.ShoppingCartItem;
 
 /**
- *
+ * Internal frame pop up window to add product to cart
  * @author Alisha
  */
 public class AddToCartPopUp extends javax.swing.JInternalFrame {

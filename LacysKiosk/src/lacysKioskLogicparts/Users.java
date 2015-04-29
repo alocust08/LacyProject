@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskLogicparts;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
@@ -20,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Users entity class
  * @author Alisha
  */
 @Entity
@@ -55,6 +50,7 @@ public class Users implements Serializable {
     public Users() {
     }
 
+    //Should auto-increment when added to table
     //public Users(Integer userID) {
     //    this.userID = userID;
     //}

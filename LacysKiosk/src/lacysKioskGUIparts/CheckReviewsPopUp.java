@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import java.util.Collection;
@@ -14,7 +10,7 @@ import lacysKioskLogicparts.Messages;
 import lacysKioskLogicparts.Products;
 
 /**
- *
+ * Internal frame pop up to show reviews for a product
  * @author Alisha
  */
 public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
@@ -112,7 +108,7 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_reviewCloseBtnActionPerformed
 
     
-    public void setUpReviewsPopUp(Products product)
+    public void setUpReviewsPopUp(Products product) //Set up frame with review panels
     {
         this.product = product;
         
@@ -125,7 +121,6 @@ public class CheckReviewsPopUp extends javax.swing.JInternalFrame {
         JScrollPane scrollpanel = new JScrollPane(); //Scrollpanel so can see all reviews shown
         scrollpanel.setSize(reviewsPanel.getWidth(), reviewsPanel.getHeight());
         
-        //List<Messages> allReviews = MainPage.getEManager().getReviewsByProduct(product.getItemID());
         Collection<Messages> allReviews = product.getMessagesCollection();
         Iterator iter = allReviews.iterator();
         while (iter.hasNext())

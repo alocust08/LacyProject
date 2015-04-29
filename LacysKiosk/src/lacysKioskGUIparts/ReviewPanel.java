@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package lacysKioskGUIparts;
 
 import lacysKioskLogicparts.Messages;
 
 /**
- *
+ * Panel that displays single review information
  * @author Alisha
  */
 public class ReviewPanel extends javax.swing.JPanel {
@@ -74,9 +70,8 @@ public class ReviewPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public void setUpReviewPanel(Messages review, double rating)
+    public void setUpReviewPanel(Messages review, double rating) //Set up the panel with review info
     {
-        //String username = MainPage.getEManager().findUserByID(review.getUserID()).getUserName(); 
         String username = review.getUserID().getUserName();
         
         reviewerUsernameLabel.setText(username);
