@@ -31,12 +31,15 @@ public class ReviewPanel extends javax.swing.JPanel {
         reviewTextArea = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setMaximumSize(new java.awt.Dimension(345, 252));
+
         reviewerUsernameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         reviewerUsernameLabel.setText("Some username here");
 
         reviewTextArea.setEditable(false);
         reviewTextArea.setColumns(20);
         reviewTextArea.setRows(5);
+        reviewTextArea.setWrapStyleWord(true);
         jScrollPane1.setViewportView(reviewTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

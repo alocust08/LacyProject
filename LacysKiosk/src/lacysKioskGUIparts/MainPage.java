@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import lacysKioskLogicparts.LacysEntityManager;
+import lacysKioskLogicparts.Messages;
 import lacysKioskLogicparts.Products;
 import lacysKioskLogicparts.ShoppingCart;
 import lacysKioskLogicparts.ShoppingCartItem;
@@ -33,6 +34,7 @@ public class MainPage extends javax.swing.JFrame {
     private static AddToCartPopUp addCart; //This popup window confirms adding an item to cart
     private static CheckReviewsPopUp checkReviews; //This popup window shows product reviews
     private static ProductUpdatePopUp productUpdate; //This pop up windows allows admins to update product information
+    private static ReviewPopUp writeReview; 
     private static LacysEntityManager eManager; //Class to handle inventory requests
     
    
@@ -46,10 +48,12 @@ public class MainPage extends javax.swing.JFrame {
         addCart = new AddToCartPopUp();
         checkReviews = new CheckReviewsPopUp();
         productUpdate = new ProductUpdatePopUp();
+        writeReview = new ReviewPopUp();
        
         desktop.add(addCart);
         desktop.add(checkReviews);
         desktop.add(productUpdate);
+       desktop.add(writeReview);
        
         setProductButtons(false);
         //addProductButton.setVisible(false);
@@ -70,12 +74,12 @@ public class MainPage extends javax.swing.JFrame {
         pagesLabel = new javax.swing.JLabel();
         pagesBoxLabel = new javax.swing.JLabel();
         pagesComboBox = new javax.swing.JComboBox();
+        addProductButton = new javax.swing.JButton();
+        mainPageButton = new javax.swing.JButton();
         rightSidePanel = new javax.swing.JPanel();
         shoppingLabel = new javax.swing.JLabel();
         categoryComboBox = new javax.swing.JComboBox();
         categoryBoxLabel = new javax.swing.JLabel();
-        addProductButton = new javax.swing.JButton();
-        mainPageButton = new javax.swing.JButton();
         middlePanel = new javax.swing.JPanel();
         homePagePanel = new javax.swing.JPanel();
         storeNameLabel = new javax.swing.JLabel();
@@ -128,6 +132,14 @@ public class MainPage extends javax.swing.JFrame {
         zipTextField = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         itemsTextArea = new javax.swing.JTextArea();
+        adminMainPage = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        adminTextArea = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        viewCustomersButton = new javax.swing.JButton();
+        viewOrdersButton = new javax.swing.JButton();
+        viewMessagesButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         headerPanel2 = new lacysKioskGUIparts.HeaderPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -150,20 +162,40 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        addProductButton.setText("Add Product");
+        addProductButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addProductButtonActionPerformed(evt);
+            }
+        });
+
+        mainPageButton.setText("Main Page");
+        mainPageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainPageButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leftSidePanelLayout = new javax.swing.GroupLayout(leftSidePanel);
         leftSidePanel.setLayout(leftSidePanelLayout);
         leftSidePanelLayout.setHorizontalGroup(
             leftSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftSidePanelLayout.createSequentialGroup()
-                .addGroup(leftSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(leftSidePanelLayout.createSequentialGroup()
+                .addGroup(leftSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, leftSidePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(mainPageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, leftSidePanelLayout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(leftSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pagesBoxLabel)
                             .addComponent(pagesLabel)))
-                    .addGroup(leftSidePanelLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, leftSidePanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(pagesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pagesComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, leftSidePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(addProductButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         leftSidePanelLayout.setVerticalGroup(
@@ -175,6 +207,10 @@ public class MainPage extends javax.swing.JFrame {
                 .addComponent(pagesBoxLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pagesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(addProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(mainPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -194,20 +230,6 @@ public class MainPage extends javax.swing.JFrame {
         categoryBoxLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         categoryBoxLabel.setText("Browse Category:");
 
-        addProductButton.setText("Add Product");
-        addProductButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addProductButtonActionPerformed(evt);
-            }
-        });
-
-        mainPageButton.setText("Main Page");
-        mainPageButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mainPageButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout rightSidePanelLayout = new javax.swing.GroupLayout(rightSidePanel);
         rightSidePanel.setLayout(rightSidePanelLayout);
         rightSidePanelLayout.setHorizontalGroup(
@@ -223,11 +245,8 @@ public class MainPage extends javax.swing.JFrame {
                                 .addGap(30, 30, 30)
                                 .addComponent(shoppingLabel))
                             .addGroup(rightSidePanelLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addGroup(rightSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(addProductButton)
-                                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(mainPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(29, 29, 29)
+                                .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(3, 3, 3)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -240,10 +259,6 @@ public class MainPage extends javax.swing.JFrame {
                 .addComponent(categoryBoxLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(addProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(mainPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -299,7 +314,7 @@ public class MainPage extends javax.swing.JFrame {
                                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
                                 .addComponent(storeNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1)))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         homePagePanelLayout.setVerticalGroup(
             homePagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +340,7 @@ public class MainPage extends javax.swing.JFrame {
         productViewPanel.setLayout(productViewPanelLayout);
         productViewPanelLayout.setHorizontalGroup(
             productViewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
+            .addGap(0, 475, Short.MAX_VALUE)
         );
         productViewPanelLayout.setVerticalGroup(
             productViewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,7 +395,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(newAccountPanelLayout.createSequentialGroup()
                         .addGap(146, 146, 146)
                         .addComponent(newAccountLabel)))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
         newAccountPanelLayout.setVerticalGroup(
             newAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,7 +626,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderPanelLayout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ccTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                        .addComponent(ccTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -686,6 +701,82 @@ public class MainPage extends javax.swing.JFrame {
 
         middlePanel.add(orderPanel, "orderCard");
 
+        adminTextArea.setEditable(false);
+        adminTextArea.setColumns(20);
+        adminTextArea.setRows(5);
+        adminTextArea.setWrapStyleWord(true);
+        jScrollPane4.setViewportView(adminTextArea);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Admin Home Page");
+
+        viewCustomersButton.setText("View Customers");
+        viewCustomersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewCustomersButtonActionPerformed(evt);
+            }
+        });
+
+        viewOrdersButton.setText("View Orders");
+        viewOrdersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewOrdersButtonActionPerformed(evt);
+            }
+        });
+
+        viewMessagesButton.setText("View Messages");
+        viewMessagesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewMessagesButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setText("Choose an option to view:");
+
+        javax.swing.GroupLayout adminMainPageLayout = new javax.swing.GroupLayout(adminMainPage);
+        adminMainPage.setLayout(adminMainPageLayout);
+        adminMainPageLayout.setHorizontalGroup(
+            adminMainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(adminMainPageLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(viewCustomersButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(viewOrdersButton)
+                .addGap(55, 55, 55)
+                .addComponent(viewMessagesButton)
+                .addGap(38, 38, 38))
+            .addGroup(adminMainPageLayout.createSequentialGroup()
+                .addGroup(adminMainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(adminMainPageLayout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addGroup(adminMainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)))
+                    .addGroup(adminMainPageLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        adminMainPageLayout.setVerticalGroup(
+            adminMainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(adminMainPageLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addGap(5, 5, 5)
+                .addComponent(jLabel5)
+                .addGap(14, 14, 14)
+                .addGroup(adminMainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(viewCustomersButton)
+                    .addComponent(viewOrdersButton)
+                    .addComponent(viewMessagesButton))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        middlePanel.add(adminMainPage, "adminCard");
+
         javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
@@ -697,7 +788,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(desktopLayout.createSequentialGroup()
                         .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                        .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -726,7 +817,7 @@ public class MainPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(desktop)
-                .addGap(23, 23, 23))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1053,13 +1144,40 @@ public class MainPage extends javax.swing.JFrame {
 
     private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainPageButtonActionPerformed
         CardLayout cl = (CardLayout)(middlePanel.getLayout());
-        cl.show(middlePanel, "homePanelCard");
+        cl.show(middlePanel, "adminCard");
+        adminTextArea.setText("");
+
     }//GEN-LAST:event_mainPageButtonActionPerformed
 
     private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductButtonActionPerformed
         productUpdate.setUpUpdatePopUp();
         productUpdate.setVisible(true);
     }//GEN-LAST:event_addProductButtonActionPerformed
+
+    private void viewCustomersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCustomersButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewCustomersButtonActionPerformed
+
+    private void viewOrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewOrdersButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewOrdersButtonActionPerformed
+
+    private void viewMessagesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMessagesButtonActionPerformed
+        // TODO add your handling code here:
+        List<Messages> allMessages = eManager.getAllStoreMessages();
+        
+        String messageText = "";
+        for (int i = 0; i < allMessages.size(); i++)
+        {
+            Messages message = allMessages.get(i);
+            messageText += String.format("Message ID: %d\n", message.getMessageID());
+            messageText += String.format("Message Type: %s\n", message.getMessageType());
+            messageText += String.format("Username: %s\n", message.getUserID().getUserName());
+            messageText += String.format("Contents: %s\n", message.getContents());
+            messageText += "--------------------------------------------------------------------\n\n\n";
+        }
+        adminTextArea.setText(messageText);
+    }//GEN-LAST:event_viewMessagesButtonActionPerformed
 
     
     public static void setUser(Users aUser)
@@ -1098,6 +1216,11 @@ public class MainPage extends javax.swing.JFrame {
         return productUpdate;
     }
     
+    public static ReviewPopUp getReviewPopUp()
+    {
+        return writeReview;
+    }
+    
     public void changeHeader()
     {
         HeaderPanel.setNumInCartLabel(cart.getNumItems());
@@ -1121,13 +1244,19 @@ public class MainPage extends javax.swing.JFrame {
         {
             addProductButton.setVisible(true);
             mainPageButton.setVisible(true);
+            pagesLabel.setVisible(false);
+            pagesComboBox.setVisible(false);
         }
         else
         {
             addProductButton.setVisible(false);
             mainPageButton.setVisible(false);
+            pagesLabel.setVisible(true);
+            pagesComboBox.setVisible(true);
         }
     }
+    
+  
     
     public boolean haveEmptyFields()
     {
@@ -1189,6 +1318,8 @@ public class MainPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JButton addProductButton;
+    private javax.swing.JPanel adminMainPage;
+    private javax.swing.JTextArea adminTextArea;
     private javax.swing.JPanel cartPanel;
     private javax.swing.JTable cartTable;
     private javax.swing.JLabel categoryBoxLabel;
@@ -1216,11 +1347,14 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPanel leftSidePanel;
     private static javax.swing.JButton mainPageButton;
     private javax.swing.JPanel middlePanel;
@@ -1236,8 +1370,8 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel orderLabel;
     private javax.swing.JPanel orderPanel;
     private javax.swing.JLabel pagesBoxLabel;
-    private javax.swing.JComboBox pagesComboBox;
-    private javax.swing.JLabel pagesLabel;
+    private static javax.swing.JComboBox pagesComboBox;
+    private static javax.swing.JLabel pagesLabel;
     private javax.swing.JButton placeOrderButton;
     private javax.swing.JPanel productViewPanel;
     private javax.swing.JPanel rightSidePanel;
@@ -1251,6 +1385,9 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel taxesLabel;
     private javax.swing.JLabel totalLabel;
     private javax.swing.JButton updateButton;
+    private javax.swing.JButton viewCustomersButton;
+    private javax.swing.JButton viewMessagesButton;
+    private javax.swing.JButton viewOrdersButton;
     private javax.swing.JTextField zipTextField;
     // End of variables declaration//GEN-END:variables
 }

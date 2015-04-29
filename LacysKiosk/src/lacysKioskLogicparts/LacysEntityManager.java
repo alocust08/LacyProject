@@ -99,6 +99,19 @@ public class LacysEntityManager {
         return num;
     }
     
+    public int getLastFeedbackID()
+    {
+        int num = 0;
+        List<Messages> messageList = em.createQuery("SELECT m FROM Messages m Order by m.messageID").getResultList();
+        int total = messageList.size();
+        num = messageList.get(total - 1).getMessageID();
+        return num;
+    }
+    
+    public List<Messages> getAllStoreMessages()
+    {
+        return (List<Messages>) em.createNamedQuery("Messages.findByTarget").setParameter("target", "Store").getResultList();  
+    }
         
     public boolean login(String username, String password)
     {
@@ -127,16 +140,20 @@ public class LacysEntityManager {
     
     public void addFeedback(String text)
     {
+        int newNum = getLastFeedbackID() + 1;
         em.getTransaction().begin();
         Messages message = new Messages("Message", "Store", text, null, MainPage.getUser());
+        message.setMessageID(newNum);
         em.persist(message);
         em.getTransaction().commit(); 
     }
     
     public void addReview(String text, Products product)
     {
+        int newNum = getLastFeedbackID() + 1;
         em.getTransaction().begin();
         Messages message = new Messages("Feedback", "Product", text, product, MainPage.getUser());
+        message.setMessageID(newNum);
         em.persist(message);
         em.getTransaction().commit();
     }

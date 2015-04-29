@@ -176,6 +176,9 @@ public class ProductPanel extends javax.swing.JPanel {
 
     private void writeReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeReviewButtonActionPerformed
         //Open pop up window to write a review for a product
+        ReviewPopUp writePopUp = MainPage.getReviewPopUp();
+        writePopUp.setUpWritePopUp(product);
+        writePopUp.setVisible(true);
     }//GEN-LAST:event_writeReviewButtonActionPerformed
 
     public void setProductPanel(Products product){ //set up product panel
