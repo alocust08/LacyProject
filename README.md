@@ -6,3 +6,5 @@ It is a GUI application that is connected to an sqlite database and coded in Jav
 Set Up Database instructions
 -----------------------------
 The database used for this program is an sqlite database named Lacys.  It is included in the files in this repo.  To set it up to use with the program, create a folder named data on your C drive and place the database file in there.  So it should be located at ------> C:\data\Lacys
+
+The original history of the project can be viewed at: https://github.com/alocust08/LacyProject
